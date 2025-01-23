@@ -1,11 +1,3 @@
-<?php
-	
-	require '../helpers/helpers.php';
-	require basePath('../views/home.view.php');
+<?php require '../helpers/helpers.php'; ?>
 
-	echo __DIR__;
-	
-
-
-
-?>
+<?php loadView('home'); ?>
