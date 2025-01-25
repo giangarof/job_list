@@ -1,3 +1,13 @@
+<?php loadPartial('css'); ?>
+<?php loadPartial('navbar'); ?>
+
+<section class="sub-header">
+	<div class="inner-sub-header">
+		<h2>Unlock your carrer potential.</h2>
+		<h3>Discover the right career oportunity for you.
+	</div>
+</section>
+
 <section>
 
 	<div class="first-section">
@@ -21,12 +31,7 @@
 
 	</div>
 
-	<div class="third-section">
-		<a href="/listings"> 
-			<button class="btn-first-section">Show all jobs</button>
-		</a>
-
-	</div>
-
-
 </section>
+
+
+<?php loadPartial('footer'); ?>

@@ -19,6 +19,8 @@
 	function loadView($name){
 		$view =  basePath("../views/{$name}.view.php");
 
+		// inspect($view);
+
 		if(file_exists($view)){
 			require $view;
 		} else {
@@ -42,4 +44,39 @@
 		};
 	}
 
+	/**
+	 * INSPECT A VALUE
+	 * 
+	 * @param mixed $value
+	 * @return void
+	 * 
+	 */
+	function inspect($value){
+		echo '<pre>';
+		var_dump($value);
+		echo '</pre';
+	}
+
+	/**
+	 * INSPECT A VALUE AND DIE
+	 * 
+	 * @param mixed $value
+	 * @return void
+	 * 
+	 */
+	function inspect_and_die($value){
+		echo '<pre>';
+		var_dump($value);
+		echo '</pre';
+		die();
+	}
+
+
 ?>
+
+
+
+
+
+
+

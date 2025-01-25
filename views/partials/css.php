@@ -68,9 +68,9 @@
 		}
 
 		input{
-			border-radius: 10px;
+/*			border-radius: 10px;*/
 			border:none;
-			height: 1.4rem;
+			height: 1.7rem;
 			padding: .7rem;
 		}
 
@@ -80,7 +80,8 @@
 
 		.header-btn{
 			background-color: royalblue;
-			height: 1.4rem;
+			height: 1.7rem;
+			border-radius: 0px;
 		}
 
 		.sub-header{
@@ -153,6 +154,96 @@
 			color: #493bca
 		}
 
+		.third-section{
+			text-align: center;
+		}
+
+		/*	CREATE.VIEW (JOB LISTING)	*/
+
+		.create-job{
+			background-color: #e8e8e8;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			padding: 3rem 0 2rem 0;
+
+		}
+
+		.top-form{
+			padding: 2rem 0 2rem 0;
+		}
+
+		.top-form>h1, .top-form>h3{
+			color: #000;
+			text-align: center;
+		}
+
+		.create-form{
+			background-color: #fff;
+			width: 500px;
+			border-radius: 10px;
+			box-shadow: 0px 1px 4px 0px;
+		}
+
+		.inner-form{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1.3rem;
+		}
+
+		.inner-form > input{
+			border:1px solid #5e5e5e;
+			width: 95%;
+			border-radius: 4px;
+			height: 1.8rem;
+		}
+
+		.form-btns{
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			padding: 2rem 0 2rem 0;
+		}
+
+		.inner-form-btns{
+			display: flex;
+			flex-direction: column;
+			width: 98%;
+			gap: 1rem;
+		}
+
+		.inner-form-btns>button{
+			border-radius: initial;
+			height: 2.4rem;
+		}
+
+		.save{
+			background-color: green;
+		}
+		.cancel{
+			background-color: red;
+		}
+
+
+		/*	ERROR MESSAJE	*/
+
+		.err-msg{
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+
+		.inner-err{
+			text-align: center;
+			padding: 2rem;
+			line-height: 4rem;
+		}
+
+
+
+
+		
 		/*	FOOTER	*/
 
 		footer{
