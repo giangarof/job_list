@@ -68,16 +68,6 @@ class Router {
 		$this->error(404);
 	}
 
-
-
-
-
-
-
-
-
-
-
 }
 	
 
