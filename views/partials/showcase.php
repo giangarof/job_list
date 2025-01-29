@@ -1,3 +1,4 @@
+
 <section>
 
 	<div class="first-section">
@@ -5,6 +6,8 @@
 			<button class="btn-first-section">Recent Jobs</button>
 		</a>
 	</div>
+
+	<?php foreach($listings as $list) : ?>
 	
 	<div class="second-section"> 
 		<div class="card"> 
@@ -16,10 +19,10 @@
 				<p>Tags: Developent, Coding</p>
 			</div>
 			<button class="btn-details">Details</button>
-
 		</div>
-
 	</div>
+
+	<?php endforeach; ?>
 
 	<div class="third-section">
 		<a href="/listings"> 

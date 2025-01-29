@@ -16,12 +16,13 @@
 	 * @param string $name
 	 * @return void
 	 */
-	function loadView($name){
+	function loadView($name, $data = []){
 		$view =  basePath("../views/{$name}.view.php");
 
 		// inspect($view);
 
 		if(file_exists($view)){
+			extract($data);
 			require $view;
 		} else {
 			echo "View '{$name}' not found!";
@@ -69,6 +70,14 @@
 		var_dump($value);
 		echo '</pre';
 		die();
+	}
+
+	// Format Salary
+	// @param string salary
+	// @return string formatted salary
+
+	function formatSalary($salary){
+		return '$' . number_format(floatval($salary));
 	}
 
 

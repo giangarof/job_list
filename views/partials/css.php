@@ -119,18 +119,26 @@
 			color: #000;
 			border: 2px solid #e8e8e8;
 		}
-		.second-section{
+
+		.grid{
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			grid-gap: 1rem;
+			place-items: center;
+			padding: 2rem 0 2rem 0;
+		}
+
+		.outer-card{
+			
 			display: flex;
 			flex-direction: row;
 			justify-content: center;
 			margin: 10px 0 10px 0;
+			
 		}
 
 		.card{
-			display: flex;
-			flex-direction: column;
-			gap: .3rem;
-			width: 350px;
+			width: 100%;
 			background-color: #e8e8e8;
 			padding: 1rem;
 			border-radius: 10px;
@@ -138,6 +146,7 @@
 
 		.inner-card{
 			padding: .5rem;
+			margin: 1rem 0 1rem 0;
 			background-color: #fff;
 			border-radius: 10px;
 			display: flex;
@@ -242,6 +251,8 @@
 
 
 
+		/*	SHOW VIEW	*/
+		
 
 		
 		/*	FOOTER	*/

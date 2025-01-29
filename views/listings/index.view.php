@@ -16,19 +16,21 @@
 		</a>
 	</div>
 	
-	<div class="second-section"> 
+	<div class="grid"> 
+	<?php foreach($listings as $list) : ?>
 		<div class="card"> 
-			<p>Software Engineer</p>
-			<p>We are looking a skilled Software Engineer with expertise in cloud enviroments.</p>
+			<p><?= $list->title ?></p>
+			<p><?= $list->description ?></p>
 			<div class="inner-card">
-				<p>Salary: $80.000</p>
-				<p>Location: Montana</p>
-				<p>Tags: Developent, Coding</p>
+				<p>Salary: <?= formatSalary($list->salary) ?></p>
+				<p>Location: <?= $list->city ?>, <?= $list->state ?></p>
+				<p>Tags: <?= $list->tags ?></p>
 			</div>
-			<button class="btn-details">Details</button>
-
+			<a class="btn-to-details" href="/listing?id=<?= $list->id ?>">
+				<button class="btn-details">Details</button>
+			</a>
 		</div>
-
+	<?php endforeach; ?>
 	</div>
 
 </section>
