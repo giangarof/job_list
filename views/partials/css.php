@@ -128,14 +128,14 @@
 			padding: 2rem 0 2rem 0;
 		}
 
-		.outer-card{
+		/*.outer-card{
 			
 			display: flex;
 			flex-direction: row;
 			justify-content: center;
 			margin: 10px 0 10px 0;
 			
-		}
+		}*/
 
 		.card{
 			width: 100%;
@@ -252,6 +252,64 @@
 
 
 		/*	SHOW VIEW	*/
+
+		.show-view-section{
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+		.outer-card{
+			/*display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin: 10px 0 10px 0;*/
+			width: 50%;
+			
+		}
+
+		.general{
+			min-width: 100%;
+			max-width: 100%;
+		}
+
+		.card-1{
+			background-color: #efefef;
+			padding: 1rem;
+			border-radius: 10px;
+		}
+
+		.top-card{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+		}
+
+		.top-card > a{
+			color: #000;
+		}
+
+		.btn-show{
+			border-radius: initial;
+			height: 2rem;
+		}
+
+		.card-2{
+			border-radius: 10px;
+			line-height: 3rem;
+		}
+
+		.requirements{
+			background-color: #efefef;
+			padding: 1rem;
+			border-radius: 10px;
+			line-height: 1.6rem;
+		}
+
+		.apply{
+			text-align: center;
+			padding: 2rem 0 0 0;
+		}
 		
 
 		

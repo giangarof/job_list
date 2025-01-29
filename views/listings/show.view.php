@@ -2,16 +2,18 @@
 <?php loadPartial('navbar'); ?>
 <?php loadPartial('header'); ?>
 
-<section>
+<section class="show-view-section">
 	<div class="outer-card"> 
-		<div class="card-1">
+		<div class="card-1 general">
 			<div class="top-card">
-				<a></a>
-				<a><button></button></a>
-				<a><button></button></a>
+				<a href="/listings"> <- Go back to listings</a>
+				<div>
+					<a href='/'><button class="btn-show save">Edit</button></a>
+					<a href="/"><button class="btn-show cancel">Delete</button></a>
+				</div>
 			</div>
-			<div class="job-info">
-				<p><?= $listing->title ?></p>
+			<div class="">
+				<p><strong><?= $listing->title ?> </strong></p>
 				<p><?= $listing->description ?></p>
 				<div class="inner-card">
 					<p>Salary:  <?= formatSalary($listing->salary) ?></p>
@@ -20,19 +22,21 @@
 				</div>
 			</div>
 		</div>
-		<div class="card-2">
+		<div class="card-2 general">
 			<h3>Job Details</h3>
 			<div class="requirements">
-				
+				<p><strong>Requirements:</strong></p>
+				<p><?= $listing->requirements ?></p>
+				<p><strong>Benefits: </strong></p>
+				<p><?= $listing->benefits ?></p>
 			</div>
 		</div>
-	</div>
+		<div class="apply">
+			<a href="/listings"> 
+				<button class="btn-first-section">Apply Now</button>
+			</a>
 
-	<div class="third-section">
-		<a href="/listings"> 
-			<button class="btn-first-section">Apply Now</button>
-		</a>
-
+		</div>
 	</div>
 
 
