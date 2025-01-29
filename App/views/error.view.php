@@ -3,8 +3,8 @@
 
 <div class="err-msg">
 	<div class="inner-err">
-		<p>404 error</p>
-		<p>This page do not exist</p>
+		<p><?= $status ?></p>
+		<p><?= $message ?></p>
 	</div>
 
 </div>
