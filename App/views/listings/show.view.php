@@ -32,7 +32,7 @@
 			</div>
 		</div>
 		<div class="apply">
-			<a href="/listings"> 
+			<a href="#"> 
 				<button class="btn-first-section">Apply Now</button>
 			</a>
 

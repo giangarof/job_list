@@ -19,7 +19,7 @@
 					<p>Location: <?= $list->city ?>, <?= $list->state ?></p>
 					<p>Tags: <?= $list->tags ?></p>
 				</div>
-				<a class="btn-to-details" href="/listing?id=<?= $list->id ?>">
+				<a class="btn-to-details" href="/listing/<?= $list->id ?>">
 				<button class="btn-details">Details</button>
 				</a>
 

@@ -11,27 +11,27 @@
 
 
 <section class="create-job">
-	<form class="create-form">
+	<form class="create-form" method="POST" action="/listings">
 		<div class="top-form">
 			<h1>Create Job Listing</h1>
 			<h3>Job Info</h3>
 		</div>
 
 		<div class="inner-form">
-			<input placeholder="Job Title" />
-			<input placeholder="Job Description" /> 
-			<input placeholder="Annual Salary" /> 
-			<input placeholder="Requirements" /> 
-			<input placeholder="Benefits" />  
+			<input name="title" placeholder="Job Title" />
+			<input name="description" placeholder="Job Description" /> 
+			<input name="salary" placeholder="Annual Salary" /> 
+			<input name="requirements" placeholder="Requirements" /> 
+			<input name="benefits" placeholder="Benefits" />  
 
 			<h3>Company Info & Location</h3>
 	
-			<input placeholder="Company Name" />
-			<input placeholder="Address" /> 
-			<input placeholder="City" /> 
-			<input placeholder="State" /> 
-			<input placeholder="Phone" />
-			<input placeholder="Email Address For Application" />
+			<input name="company-name" placeholder="Company Name" />
+			<input name="address" placeholder="Address" /> 
+			<input name="city" placeholder="City" /> 
+			<input name="state" placeholder="State" /> 
+			<input name="phone" placeholder="Phone" />
+			<input name="company-email" placeholder="Email Address For Application" />
 		</div>
 
 		<div class="form-btns">

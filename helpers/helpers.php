@@ -80,6 +80,10 @@
 		return '$' . number_format(floatval($salary));
 	}
 
+	function sanitize($data){
+		return filter_var(trim($data), FILTER_SANITIZE_SPECIAL_CHARS);
+	}
+
 
 ?>
 
