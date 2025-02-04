@@ -18,20 +18,25 @@
 		</div>
 
 		<div class="inner-form">
-			<input name="title" placeholder="Job Title" />
-			<input name="description" placeholder="Job Description" /> 
-			<input name="salary" placeholder="Annual Salary" /> 
-			<input name="requirements" placeholder="Requirements" /> 
-			<input name="benefits" placeholder="Benefits" />  
+			<?php if(isset($errors)) : ?>
+				<?php foreach($errors as $error) : ?>
+					<p> <?= $error ?> </p>
+				<?php endforeach; ?>
+			<?php endif; ?>
+			<input name="title" placeholder="Job Title" value="<?= $listing['title'] ?? '' ?>" />
+			<input name="description" placeholder="Job Description" value="<?= $listing['description'] ?? '' ?>"/> 
+			<input name="salary" placeholder="Annual Salary" value="<?= $listing['salary'] ?? '' ?>"/> 
+			<input name="requirements" placeholder="Requirements" value="<?= $listing['requirements'] ?? '' ?>"/> 
+			<input name="benefits" placeholder="Benefits" value="<?= $listing['benefits'] ?? '' ?>"/>  
 
 			<h3>Company Info & Location</h3>
 	
-			<input name="company-name" placeholder="Company Name" />
-			<input name="address" placeholder="Address" /> 
-			<input name="city" placeholder="City" /> 
-			<input name="state" placeholder="State" /> 
-			<input name="phone" placeholder="Phone" />
-			<input name="company-email" placeholder="Email Address For Application" />
+			<input name="company-name" placeholder="Company Name" value="<?= $listing['company'] ?? '' ?>"/>
+			<input name="address" placeholder="Address" value="<?= $listing['address'] ?? '' ?>"/> 
+			<input name="city" placeholder="City" value="<?= $listing['city'] ?? '' ?>"/> 
+			<input name="state" placeholder="State" value="<?= $listing['state'] ?? '' ?>" /> 
+			<input name="phone" placeholder="Phone" value="<?= $listing['phone'] ?? '' ?>"/>
+			<input name="email" placeholder="Email Address For Application" value="<?= $listing['email'] ?? '' ?>"/>
 		</div>
 
 		<div class="form-btns">
