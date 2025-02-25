@@ -13,16 +13,19 @@ class ListingController{
 		
 	}
 
+	// display all jobs
 	public function index(){
-		$listings =  $this->db->query('SELECT * FROM listings')->fetchAll();
+		$listings =  $this->db->query('SELECT * FROM listings ORDER BY created_at DESC')->fetchAll();
 
-		loadView('home', ['listings' => $listings]);
+		loadView('listings/index', ['listings' => $listings]);
 	}
 
+	// show the create form
 	public function create(){
 		loadView('listings/create');
 	}
 
+	//display a job descritption
 	public function show($params){
 		$id = $params['id'] ?? '';
 		$params = [
@@ -42,6 +45,7 @@ class ListingController{
 		]);
 	}
 
+	// post a job
 	public function store(){
 		$allowedFields = [
 			'title', 'description', 'salary', 'tags', 'company', 'address', 'city', 'state', 'phone', 'email', 'requirements', 'benefits', 'tags'
@@ -99,6 +103,7 @@ class ListingController{
 		}
 	}
 
+	// delete job
 	public function destroy($params){
 		$id = $params['id'];
 
@@ -114,6 +119,11 @@ class ListingController{
 		}
 
 		$this->db->query('DELETE FROM listings WHERE id = :id', $params);
+
+		$_SESSION['success_message'] = 'Listing deleted successfully';
+
+
+
 		redirect('/listings');
 
 	}

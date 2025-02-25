@@ -11,10 +11,12 @@
 <section>
 
 	<div class="first-section">
-		<a href=''>
-			<button class="btn-first-section">Recent Jobs</button>
-		</a>
+		<!-- <a href=''> -->
+			<button class="btn-first-section">All Jobs</button>
+		<!-- </a> -->
 	</div>
+
+	<?= loadPartial("message") ?>
 	
 	<div class="grid"> 
 	<?php foreach($listings as $list) : ?>
@@ -35,6 +37,12 @@
 			</a>
 		</div>
 	<?php endforeach; ?>
+	</div>
+
+	<div class="first-section">
+		<a href='/'>
+			<button class="btn-first-section">Home page</button>
+		</a>
 	</div>
 
 </section>

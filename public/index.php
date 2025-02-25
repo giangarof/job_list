@@ -1,19 +1,10 @@
 <?php 
+	session_start();
 	require __DIR__ . '/../vendor/autoload.php';
 
 	require '../helpers/helpers.php'; 
 
 	use Framework\Router;
-
-	// $config = require basePath('../' . 'config/db.php');
-	// $db = new Database($config);
-
-	// spl_autoload_register(function($class){
-	// 	$path = basePath('../Framework/' . $class . '.php');
-	// 	if(file_exists($path)){
-	// 		require $path;
-	// 	}
-	// });
 	
 	$router = new Router();
 	$routes = require basePath('../' . 'routes.php');
