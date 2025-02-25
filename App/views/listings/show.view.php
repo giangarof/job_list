@@ -9,7 +9,10 @@
 				<a href="/listings"> <- Go back to listings</a>
 				<div>
 					<a href='/'><button class="btn-show save">Edit</button></a>
-					<a href="/"><button class="btn-show cancel">Delete</button></a>
+					<form method="POST">
+						<input type="hidden" name="_method" value="delete">
+						<button class="btn-show cancel">Delete</button>
+					</form>					
 				</div>
 			</div>
 			<div class="">

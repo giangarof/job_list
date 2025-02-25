@@ -28,10 +28,11 @@
 			<input name="salary" placeholder="Annual Salary" value="<?= $listing['salary'] ?? '' ?>"/> 
 			<input name="requirements" placeholder="Requirements" value="<?= $listing['requirements'] ?? '' ?>"/> 
 			<input name="benefits" placeholder="Benefits" value="<?= $listing['benefits'] ?? '' ?>"/>  
+			<input name="tags" placeholder="tags" value="<?= $listing['tags'] ?? '' ?>"/> 
 
 			<h3>Company Info & Location</h3>
 	
-			<input name="company-name" placeholder="Company Name" value="<?= $listing['company'] ?? '' ?>"/>
+			<input name="company" placeholder="Company Name" value="<?= $listing['company'] ?? '' ?>"/>
 			<input name="address" placeholder="Address" value="<?= $listing['address'] ?? '' ?>"/> 
 			<input name="city" placeholder="City" value="<?= $listing['city'] ?? '' ?>"/> 
 			<input name="state" placeholder="State" value="<?= $listing['state'] ?? '' ?>" /> 

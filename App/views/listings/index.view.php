@@ -24,9 +24,13 @@
 			<div class="inner-card">
 				<p>Salary: <?= formatSalary($list->salary) ?></p>
 				<p>Location: <?= $list->city ?>, <?= $list->state ?></p>
-				<p>Tags: <?= $list->tags ?></p>
+				<?php if(!empty($list->tags)) : ?>
+					<!-- <li> -->
+						<p>Tags: <?= $list->tags ?></p>
+					<!-- </li> -->
+				<?php endif; ?>
 			</div>
-			<a class="btn-to-details" href="/listing/<?= $list->id ?>">
+			<a class="btn-to-details" href="/listings/<?= $list->id ?>">
 				<button class="btn-details">Details</button>
 			</a>
 		</div>

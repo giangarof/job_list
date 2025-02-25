@@ -14,7 +14,7 @@ class ListingController{
 	}
 
 	public function index(){
-		$listings =  $this->db->query('SELECT * FROM listings LIMIT 3')->fetchAll();
+		$listings =  $this->db->query('SELECT * FROM listings')->fetchAll();
 
 		loadView('home', ['listings' => $listings]);
 	}
@@ -44,13 +44,13 @@ class ListingController{
 
 	public function store(){
 		$allowedFields = [
-			'title', 'description', 'salary', 'tags', 'company', 'address', 'city', 'state', 'phone', 'email', 'requirements', 'benefits'
+			'title', 'description', 'salary', 'tags', 'company', 'address', 'city', 'state', 'phone', 'email', 'requirements', 'benefits', 'tags'
 		];
 		$newListingData = array_intersect_key($_POST, array_flip($allowedFields));
 		$newListingData['user_id'] = 1;
 		$newListingData = array_map('sanitize', $newListingData);
 
-		$requiredFields =['title', 'description', 'email', 'city', 'state'];
+		$requiredFields =['title', 'description', 'email', 'city', 'state', 'salary'];
 		$errors = [];
 
 		foreach ($requiredFields as $field) {
@@ -65,13 +65,56 @@ class ListingController{
 				'listing' => $newListingData
 			]);
 		}else {
-			echo 'done';
+			// submit data
+
+			$fields = [];
+			$values = [];
+
+			// fields
+			foreach($newListingData as $field => $value){
+				$fields[] = $field;
+			}
+			$fields = implode(',', $fields);
+
+			//values
+			foreach($newListingData as $field => $value){
+				// $values[] = $field;
+				// convert empty strings to null
+				if($value === ''){
+					$newListingData[$field] = null;
+				}
+				$values[] = ':' . $field;
+
+			}
+			$values = implode(', ', $values);
+
+			$query = "INSERT INTO listings ({$fields}) VALUES ({$values})";
+
+			$this->db->query($query, $newListingData);
+
+			// $fields = implode(',', $fields);
+			// inspect_and_die($values);
+			redirect('/listings');
+
+		}
+	}
+
+	public function destroy($params){
+		$id = $params['id'];
+
+		$params = [
+			'id' => $id
+		];
+
+		$listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $params)->fetch();
+
+		if(!$listing){
+			ErrorController::notFound();
+			return;
 		}
 
+		$this->db->query('DELETE FROM listings WHERE id = :id', $params);
+		redirect('/listings');
 
-
-
-
-		inspect_and_die($errors);
 	}
 }
