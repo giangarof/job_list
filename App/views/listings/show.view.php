@@ -5,10 +5,11 @@
 <section class="show-view-section">
 	<div class="outer-card"> 
 		<div class="card-1 general">
+			<?= loadPartial("message") ?>
 			<div class="top-card">
 				<a href="/listings"> <- Go back to listings</a>
 				<div>
-					<a href='/'><button class="btn-show save">Edit</button></a>
+					<a href='/listings/edit/<?= $listing->id ?>'><button class="btn-show save">Edit</button></a>
 					<form method="POST">
 						<input type="hidden" name="_method" value="delete">
 						<button class="btn-show cancel">Delete</button>
@@ -20,7 +21,7 @@
 				<p><?= $listing->description ?></p>
 				<div class="inner-card">
 					<p>Salary:  <?= formatSalary($listing->salary) ?></p>
-					<p>Location: <?= $listing->city ?>, <?= $listing->state ?></p>
+					<p>Location: <?= $listing->address ?>, <?= $listing->city ?>, <?= $listing->state ?></p>
 					<p>Tags: <?= $listing->tags ?></p>
 				</div>
 			</div>
