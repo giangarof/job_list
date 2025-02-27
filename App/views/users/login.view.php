@@ -9,18 +9,14 @@
 </section>
 
 <section class="create-job">
-	<form class="create-form" method="POST" action="/listings">
+	<form class="create-form" method="POST" action="/auth/login">
 		<div class="top-form">
 			<h1>Log in</h1>
 			<h3>Start finding your new job</h3>
 		</div>
 
 		<div class="inner-form">
-			<?php if(isset($errors)) : ?>
-				<?php foreach($errors as $error) : ?>
-					<p> <?= $error ?> </p>
-				<?php endforeach; ?>
-			<?php endif; ?>
+			<?= loadPartial('errors', ['errors' => $errors ?? [] ]) ?>
 			<input name="email" placeholder="Email"  /> 
 			<input name="password" placeholder="Password"  />  
 		</div>
