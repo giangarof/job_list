@@ -19,11 +19,7 @@
 		</div>
 
 		<div class="inner-form">
-			<?php if(isset($errors)) : ?>
-				<?php foreach($errors as $error) : ?>
-					<p> <?= $error ?> </p>
-				<?php endforeach; ?>
-			<?php endif; ?>
+			<?= loadPartial('errors', ['errors' => $errors ?? [] ]) ?>
 			<input name="title" placeholder="Job Title" value="<?= $listing->title ?? '' ?>" />
 			<input name="description" placeholder="Job Description" value="<?= $listing->description ?? '' ?>"/> 
 			<input name="salary" placeholder="Annual Salary" value="<?= $listing->salary ?? '' ?>"/> 
