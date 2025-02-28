@@ -6,6 +6,7 @@
 	<div class="outer-card"> 
 		<div class="card-1 general">
 			<?= loadPartial("message") ?>
+			<?php if(Framework\Authorization::isOwner($listing->user_id)) : ?>
 			<div class="top-card">
 				<a href="/listings"> <- Go back to listings</a>
 				<div>
@@ -16,6 +17,8 @@
 					</form>					
 				</div>
 			</div>
+			<?php endif; ?>
+
 			<div class="">
 				<p><strong><?= $listing->title ?> </strong></p>
 				<p><?= $listing->description ?></p>
