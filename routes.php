@@ -1,4 +1,7 @@
 <?php
+	//filter jobs
+	$router->get('/listings/search', 'ListingController@search');
+	
 	//Job list
 	$router->get('/', 'HomeController@index');
 	$router->get('/listings', 'ListingController@index');
@@ -20,3 +23,4 @@
 	$router->post('/auth/register', 'UserController@store', ['guest']);
 	$router->post('/auth/logout', 'UserController@logout', ['auth']);
 	$router->post('/auth/login', 'UserController@signin', ['guest']);
+

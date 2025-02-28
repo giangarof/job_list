@@ -12,7 +12,13 @@
 
 	<div class="first-section">
 		<!-- <a href=''> -->
-			<button class="btn-first-section">All Jobs</button>
+			<button class="btn-first-section">
+				<?php if(isset($keywords)) : ?>
+					Search results for: <?= htmlspecialchars($keywords) ?>
+				<?php else : ?>
+					All Jobs
+				<?php endif; ?>
+			</button>
 		<!-- </a> -->
 	</div>
 

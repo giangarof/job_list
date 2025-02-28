@@ -3,9 +3,9 @@
 			<div>
 				<h1 class="header-h1">Find your dream job</h1>
 			</div>
-			<form>
-				<input type="" name="" placeholder="Keywords">
-				<input type="" name="" placeholder="Location">
+			<form method="GET" action="/listings/search">
+				<input type="" name="keywords" placeholder="Keywords">
+				<input type="" name="location" placeholder="Location">
 				<button class="header-btn">Search</button>
 			</form> 
 		</div>
