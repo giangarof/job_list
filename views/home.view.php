@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job list app</title>
-</head>
-<body>
+<?php loadPartials('head'); ?>
+
+<?php loadPartials('navbar'); ?>
+
+    <!-- Header -->
+     <div class="text-center text-bg-light p-5">
+        <h1>Find your dream job</h1>
+        <h3>Latest jobs</h3>
+        <i class="fa-solid fa-arrow-down fs-1"></i>
+    </div>
     
-</body>
-</html>
+<?php loadPartials('search'); ?>
+<?php loadPartials('footer'); ?>
