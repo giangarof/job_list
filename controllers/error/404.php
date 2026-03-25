@@ -1,5 +1,5 @@
 <?php
 
-echo "404";
+loadView('error/error')
 
 ?>

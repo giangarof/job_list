@@ -16,10 +16,10 @@
             <!-- Right side -->
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="/signup">Signup</a>
+                    <a class="nav-link text-white" href="/user/signup">Signup</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="/login">Login</a>
+                    <a class="nav-link text-white" href="/user/login">Login</a>
                 </li>
             </ul>
             </div>
