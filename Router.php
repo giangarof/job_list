@@ -34,7 +34,17 @@ class Router{
     }
 
 
-    // Define the request
+    // Define error method
+    // Default is 404
+
+    public function error($httpCode = 404){
+        http_response_code($httpCode);
+        loadView("error/{$httpCode}");
+        exit;
+    }
+
+
+    // Define route request
 
     public function route($uri, $method){
         foreach($this->routes as $route){
@@ -43,9 +53,8 @@ class Router{
                 return;
             }
         }
-        http_response_code(404);
-        loadView('error/404');
-        exit;
+        $this->error();
+
     }
 
 }
