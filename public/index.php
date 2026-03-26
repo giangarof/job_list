@@ -1,30 +1,19 @@
 <?php
-
-require '../helpers.php';
-
 // Run locally
 // php -S localhost:8000 -t public
 
-
-// Run sql
-//
-
-require getBasePath('Database.php');
-$config = require getBasePath('config/db.php');
-
-// instantiate DB
-$db = new Database($config);
-// $db->resetDB('jobs');
-
+require '../helpers.php';
 require getBasePath('Router.php');
-
+require getBasePath('Database.php');
+// $db->resetDB('jobs');
 $router = new Router();
 $routes = require getBasePath('routes.php');
 
+// GET THE CURRENT URI AND METHODS
 $uri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
-
+// ROUTE THE REQUEST
 $router->route($uri,$method);
    
 ?>
