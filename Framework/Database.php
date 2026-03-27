@@ -1,5 +1,8 @@
 <?php
 
+namespace Framework;
+use PDO;
+
 // PDO connection
 // PHP Data Objects.
 // A layer to connect php with the database
@@ -11,7 +14,7 @@ class Database{
         $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
         ];
 
         try {
@@ -23,9 +26,12 @@ class Database{
     }
 
     // Query the DB
-    public function query($query){
+    public function query($query, $params=[]){
         try {
             $statement = $this->conn->prepare($query);
+            foreach($params as $param =>$value){
+                $statement->bindValue(':' . $param, $value);
+            }
             $statement->execute();
             return $statement;
         } catch (PDOException $e) {
@@ -90,11 +96,15 @@ class Database{
                 ('Data Analyst', 55000, 'SQL, Excel, Python', 'Analyze business data', 'Hybrid', 'DataInsights', 'Chicago', 'Data-driven analytics company', 'Gym membership, Flexible hours', 1),
                 ('Project Manager', 65000, 'Agile, Scrum, Leadership', 'Manage projects from start to finish', 'Yes', 'BuildIt Inc.', 'Austin', 'Construction and tech projects', 'Health insurance, Bonus plan', 1),
                 ('UX Designer', 58000, 'Figma, Adobe XD, Research', 'Design user experiences', 'Yes', 'DesignHive', 'Los Angeles', 'Creative design agency', 'Remote work, Training budget', 2),
-                ('QA Engineer', 60000, 'Testing, Automation, Selenium', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2)
+                ('Data Engineer', 88000, 'Analize ', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2),
+                ('Solutions Engineer', 55000, 'Testing, Automation, Selenium', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2),
+                ('Web Consultant', 82000, 'HTML, CSS, JS, PHP', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2),
+                ('AI Engineer', 93000, 'Pytorch, tensorflow', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2),
+                ('Big Data Engineer', 74000, 'Snowflake, python', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2)
             ";
             $this->conn->exec($sql_insert_jobs);
             echo "Jobs inserted successfully.\n";
-        } catch (\Throwable $th) {
+        } catch (Throwable $e) {
             throw new Exception("Error during resetAll: " . $e->getMessage());
         }
     }

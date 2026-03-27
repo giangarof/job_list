@@ -6,10 +6,11 @@ function getBasePath($path=''){
 }
 
 // Load the view
-function loadView($name){
-    $path = getBasePath("views/{$name}.view.php");
+function loadView($name, $data=[]){
+    $path = getBasePath("App/views/{$name}.view.php");
 
     if(file_exists($path)){
+        extract($data);
         require $path;
 
     } else{
@@ -20,7 +21,7 @@ function loadView($name){
 // Load the partials
 function loadPartials($name){
 
-    $path = getBasePath("views/partials/{$name}.php");
+    $path = getBasePath("App/views/partials/{$name}.php");
 
     if(file_exists($path)){
         require $path;

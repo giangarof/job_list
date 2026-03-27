@@ -1,0 +1,15 @@
+{
+	"name": "giangarof/job_list",
+	"description": "Job list ",
+	"authors": [
+		{
+			"name": "giangarof"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Framework\\": "Framework/",
+			"App\\": "App/"
+		}
+	}
+}
