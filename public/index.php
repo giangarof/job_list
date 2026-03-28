@@ -3,8 +3,17 @@
 // php -S localhost:8000 -t public
 
 require '../helpers.php';
-require getBasePath('Router.php');
-require getBasePath('Database.php');
+
+// Autoloader
+// This code loads utomatically the class if it exist, without the need of requiring it
+spl_autoload_register(function ($class){
+    $path = getBasePath('Framework/' . $class . '.php');
+    if(file_exists($path)){
+        require $path;
+    }
+});
+
+
 // $config= require getBasePath('config/db.php');
 // $db = new Database($config);
 // $db->resetDB('jobs');
