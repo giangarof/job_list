@@ -11,6 +11,9 @@
                 <li class="nav-item">
                     <a class="nav-link text-white" href="/">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/user/profile">Profile</a>
+                </li>
             </ul>
 
             <!-- Right side -->

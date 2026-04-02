@@ -47,4 +47,21 @@ function inspect_and_die($value){
     die();
 }
 
+
+function sanitizeData($dirtyData){
+
+    if (is_array($dirtyData)) {
+        return array_map('sanitizeData', $dirtyData);
+    }
+    
+    return filter_var(trim($dirtyData), FILTER_SANITIZE_SPECIAL_CHARS);
+
+}
+
+
+function redirect($url){
+    header("Location: {$url}");
+    exit();
+}
+
 ?>

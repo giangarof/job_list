@@ -6,7 +6,22 @@
 <section class="container my-5">
     <a href="/" class="btn btn-primary rounded-3 mb-3">Go back</a>
 
-    <div class="card border-0 shadow-sm rounded-4 p-4">
+    <div class="card border-0 shadow-sm rounded-4 p-4 position-relative">
+
+        <div class="position-absolute top-0 end-0 m-3 d-flex gap-2">
+            <a href="/listings/edit/<?= $listing->id ?>" 
+               class="btn btn-sm btn-warning rounded-3">
+                ✏️ Update
+            </a>
+
+            <form action="/listings/delete/<?= $listing->id ?>" method="POST">
+                <button type="submit" 
+                        class="btn btn-sm btn-danger rounded-3"
+                        onclick="return confirm('Are you sure you want to delete this listing?')">
+                    🗑 Delete
+                </button>
+            </form>
+        </div>
 
         <!-- Job Info -->
         <h4 class="fw-bold mb-3">💼 About the Job</h4>
@@ -35,7 +50,7 @@
                 </span>
             <?php elseif ($listing->remote == "Hybrid") : ?>
                 <span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-2">
-                    ⚡ Hybrid
+                    Hybrid
                 </span>
             <?php else : ?>
                 <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-2">
@@ -73,7 +88,6 @@
         </a>
 
     </div>
-
 </section>
 
 <?php loadPartials('footer'); ?>
