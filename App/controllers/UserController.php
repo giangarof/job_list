@@ -18,6 +18,9 @@ class UserController{
     public function signup(){
         loadView("/user/signup");
     }
+    public function profile(){
+        loadView("/user/profile");
+    }
 }
 
 ?>
