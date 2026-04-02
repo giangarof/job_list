@@ -1,14 +1,18 @@
 <?php
 
 
-$router->get('/','controllers/home.php');
-$router->get('/user/login', 'controllers/user/login.php');
-$router->get('/user/signup', 'controllers/user/signup.php');
+$router->get('/','HomeController@index');
 
-$router->get('/listings',  'controllers/listings/index.php');
-$router->get('/listings/listing_details',  'controllers/listings/listing_details.php');
-$router->get('/listings/create', 'controllers/listings/create.php');
-$router->get('/listings/index', 'controllers/listings/index.php');
+// User controllers
+$router->get('/user/login', 'UserController@login');
+$router->get('/user/signup', 'UserController@signup');
 
-$router->get('/404', 'controllers/error/404.php');
+
+// Listings - Jobs
+$router->get('/listings', 'ListingsController@index');
+$router->get('/listings/listing_details/{id}',  'ListingsController@listing_details');
+$router->get('/listings/create', 'ListingsController@create');
+
+$router->get('/404', 'ErrorController@error404');
+$router->get('/403', 'ErrorController@error403');
 ?>

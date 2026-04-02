@@ -1,5 +1,8 @@
 <?php
 
+namespace Framework;
+use PDO;
+
 // PDO connection
 // PHP Data Objects.
 // A layer to connect php with the database

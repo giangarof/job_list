@@ -7,7 +7,9 @@
 
 <div class="text-center text-bg-light p-5">
     <div class=" border border-dark p-3">
-        Latest Jobs
+        <a href="/" class="">
+                Latest Jobs
+        </a>
     </div>
 </div>
 
@@ -47,9 +49,8 @@
                 </div>
     
                 <!-- Button -->
-                <button class="btn btn-primary w-100 rounded-3">
-                    Apply
-                </button>
+                <a href="/listings/listing_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">Apply</a>
+               
     
             </div>
         </div>

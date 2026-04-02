@@ -3,7 +3,6 @@
 <?php loadPartials('navbar'); ?>
 
 <!-- Header -->
-
 <div class="text-center text-bg-light p-5">
     <div class="d-flex flex-column gap-3">
         <h1>Find your dream job</h1>
@@ -15,7 +14,7 @@
     
     <?php loadPartials('search'); ?>
     <div class="mt-5 border border-dark p-3">
-        <a href="/listings/index" class="">
+        <a href="/listings" class="">
                 See the latets jobs
         </a>
     </div>
@@ -58,7 +57,7 @@
             </div>
 
             <!-- Button -->
-            <a href="/listings/listing_details?id=<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">
+            <a href="/listings/listing_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">
                 Apply
             </a>
 
