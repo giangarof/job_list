@@ -19,6 +19,9 @@
             <!-- Right side -->
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
+                    <a class="nav-link text-white" href="/user/logout">Logout</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link text-white" href="/user/signup">Signup</a>
                 </li>
                 <li class="nav-item">
@@ -28,3 +31,8 @@
             </div>
         </div>
     </nav>
+
+<?php loadPartials('message'); ?>
+
+
+

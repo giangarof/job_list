@@ -64,4 +64,13 @@ function redirect($url){
     exit();
 }
 
+// Set the message in session
+function alert($type, $msg){
+    $_SESSION['alert'] = [
+        'type' => $type,
+        'message' => $msg
+    ];
+    return;
+}
+
 ?>
