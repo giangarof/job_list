@@ -14,10 +14,11 @@
                 ✏️ Update
             </a>
 
-            <form action="/listings/delete/<?= $listing->id ?>" method="POST">
+            <form action="/listings/delete/<?= $listing->job_id ?>" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
                 <button type="submit" 
                         class="btn btn-sm btn-danger rounded-3"
-                        onclick="return confirm('Are you sure you want to delete this listing?')">
+                        >
                     🗑 Delete
                 </button>
             </form>

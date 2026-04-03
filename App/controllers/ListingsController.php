@@ -39,6 +39,22 @@ class ListingsController{
         loadView('listings/create');
     }
 
+    public function deleteListing($params){
+        $id = $params['id'] ?? '';
+        $params=[
+            'id'=> $id
+        ];
+        $listing = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
+        if(!$listing){
+            ErrorController::error404("Job doesn't exist ... ");
+            return;
+        }
+        $this->db->query("Delete FROM listings WHERE job_id = :id", $params);
+
+        alert('success', "Job has been deleted Successfully");
+        redirect('/');
+    }
+
     // store data in DB
     public function store(){
 
@@ -108,10 +124,20 @@ class ListingsController{
                 $query = "INSERT INTO listings ({$fields}) VALUES ({$values})";
                            
                 $this->db->query($query, $new_listing_data);
+                
+                alert('success', "Job has been created Successfully");
+               
                 redirect('/');
+
                 }
                                             
             }
+
+            
+        public function updateListing(){
+            return;
         }
+}
+
 ?>
                              
