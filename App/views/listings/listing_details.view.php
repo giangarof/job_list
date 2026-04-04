@@ -9,7 +9,7 @@
     <div class="card border-0 shadow-sm rounded-4 p-4 position-relative">
 
         <div class="position-absolute top-0 end-0 m-3 d-flex gap-2">
-            <a href="/listings/edit/<?= $listing->id ?>" 
+            <a href="/listings/edit/<?= $listing->job_id ?>" 
                class="btn btn-sm btn-warning rounded-3">
                 ✏️ Update
             </a>

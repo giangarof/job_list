@@ -166,7 +166,7 @@ class Database{
 //     salary int not null,
 //     requirements varchar(255) not null,
 //     description varchar(255) not null,
-//     remote varchar(100) default 'no',
+//     remote varchar(100) default 'No',
 //     company_name varchar(255) not null,
 //     job_location varchar(255) not null,
 //     company_about varchar(255) not null,
