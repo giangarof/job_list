@@ -38,7 +38,7 @@
                     <input type="text" class="form-control" name="description" aria-describedby="description" value="<?= $listing['description'] ?? "" ?>">
                 </div>
                 <div class="mb-3 form-check">
-                     <input type="checkbox" class="form-check-input" name="remote">
+                     <input type="checkbox" class="form-check-input" name="remote" value="Yes">
                      <label class="form-check-label" for="remote">Remote opportunity</label>
                  </div>
 
@@ -70,7 +70,7 @@
                             <label class="form-check-label" id="vacations">Paid vacations</label>
                         </div>
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" name="benefits[]" value="parental_leave">
+                            <input type="checkbox" class="form-check-input" name="benefits[]" value="parental leave">
                             <label class="form-check-label" id="parental_leave">Parental leave</label>
                         </div>
                         <div class="mb-3 form-check">
@@ -78,11 +78,11 @@
                             <label class="form-check-label" id="pto">PTO</label>
                         </div>
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" name="benefits[]" value="employee_discount">
+                            <input type="checkbox" class="form-check-input" name="benefits[]" value="employee discount">
                             <label class="form-check-label" id="employee_discount">Employee discount</label>
                         </div>
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" name="benefits[]" value="">
+                            <input type="checkbox" class="form-check-input" name="benefits[]" value="relocation">
                             <label class="form-check-label" id="relocation">Relocation asistance if needed</label>
                         </div>
 
