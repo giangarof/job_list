@@ -14,10 +14,10 @@ class HomeController{
     }
 
     public function index(){
-        $listings = $this->db->query("SELECT * FROM listings order by job_id desc LIMIT 6")->fetchAll();
-        // inspect($listings);
+        $jobs = $this->db->query("SELECT * FROM listings order by job_id desc LIMIT 6")->fetchAll();
+        // inspect($jobs);
 
-        loadView('home', ['listings' => $listings]);
+        loadView('home', ['jobs' => $jobs]);
     }
 
 }

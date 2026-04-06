@@ -78,29 +78,31 @@ class Database{
                 salary int not null,
                 requirements varchar(255) not null,
                 description varchar(255) not null,
-                remote varchar(100) default 'no',
+                modality varchar(100) default 'no',
                 company_name varchar(255) not null,
                 job_location varchar(255) not null,
                 company_about varchar(255) not null,
                 benefits varchar(255) not null,
                 user_id INT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
             )";
             $this->conn->exec($sql_listings_table);
             echo "Jobs table created successfully.\n";
 
             // Insert jobs
-            $sql_insert_jobs = "INSERT INTO listings (role, salary, requirements, description, remote, company_name, job_location, company_about, benefits, user_id) VALUES
-                ('Frontend Developer', 60000, 'HTML, CSS, JavaScript', 'Develop web interfaces', 'Yes', 'TechCorp', 'New York', 'Leading tech company', 'Health insurance, 401k', 1),
-                ('Backend Developer', 70000, 'PHP, MySQL, APIs', 'Develop server-side logic', 'No', 'SoftSolutions', 'San Francisco', 'Innovative software firm', 'Remote options, Paid vacation', 1),
-                ('Data Analyst', 55000, 'SQL, Excel, Python', 'Analyze business data', 'Hybrid', 'DataInsights', 'Chicago', 'Data-driven analytics company', 'Gym membership, Flexible hours', 1),
-                ('Project Manager', 65000, 'Agile, Scrum, Leadership', 'Manage projects from start to finish', 'Yes', 'BuildIt Inc.', 'Austin', 'Construction and tech projects', 'Health insurance, Bonus plan', 1),
-                ('UX Designer', 58000, 'Figma, Adobe XD, Research', 'Design user experiences', 'Yes', 'DesignHive', 'Los Angeles', 'Creative design agency', 'Remote work, Training budget', 2),
-                ('Data Engineer', 88000, 'Analize ', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2),
-                ('Solutions Engineer', 55000, 'Testing, Automation, Selenium', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2),
-                ('Web Consultant', 82000, 'HTML, CSS, JS, PHP', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2),
-                ('AI Engineer', 93000, 'Pytorch, tensorflow', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2),
-                ('Big Data Engineer', 74000, 'Snowflake, python', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2)
+            $sql_insert_jobs = "INSERT INTO listings (role, salary, requirements, description, modality, company_name, job_location, company_about, benefits, user_id) VALUES
+                ('Frontend Developer', 60000, 'HTML, CSS, JavaScript', 'Develop web interfaces', 'Remote', 'TechCorp', 'New York', 'Leading tech company', '401k, pto, vacations', 1),
+                ('Backend Developer', 70000, 'PHP, MySQL, APIs', 'Develop server-side logic', 'Remote', 'SoftSolutions', 'San Francisco', 'Innovative software firm', '401k, pto, vacations', 1),
+                ('Data Analyst', 55000, 'SQL, Excel, Python', 'Analyze business data', 'Hybrid', 'DataInsights', 'Chicago', 'Data-driven analytics company', '401k, pto, vacations', 1),
+                ('Project Manager', 65000, 'Agile, Scrum, Leadership', 'Manage projects from start to finish', 'Remote', 'BuildIt Inc.', 'Austin', 'Construction and tech projects', '401k, pto, vacations', 1),
+                ('UX Designer', 58000, 'Figma, Adobe XD, Research', 'Design user experiences', 'Remote', 'DesignHive', 'Los Angeles', 'Creative design agency', '401k, pto, vacations', 2),
+                ('Data Engineer', 88000, 'Analize ', 'Test software products', 'Remote', 'CodeCheck', 'Boston', 'Quality assurance firm', '401k, pto, vacations', 2),
+                ('Solutions Engineer', 55000, 'Testing, Automation, Selenium', 'Test software products', 'Remote', 'CodeCheck', 'Boston', 'Quality assurance firm', '401k, pto, vacations', 2),
+                ('Web Consultant', 82000, 'HTML, CSS, JS, PHP', 'Test software products', 'Remote', 'CodeCheck', 'Boston', 'Quality assurance firm', '401k, pto, vacations', 2),
+                ('AI Engineer', 93000, 'Pytorch, tensorflow', 'Test software products', 'Remote', 'CodeCheck', 'Boston', 'Quality assurance firm', '401k, pto, vacations', 2),
+                ('Big Data Engineer', 74000, 'Snowflake, python', 'Test software products', 'Remote', 'CodeCheck', 'Boston', 'Quality assurance firm', '401k, pto, vacations', 2)
             ";
             $this->conn->exec($sql_insert_jobs);
             echo "Jobs inserted successfully.\n";
@@ -166,11 +168,13 @@ class Database{
 //     salary int not null,
 //     requirements varchar(255) not null,
 //     description varchar(255) not null,
-//     remote varchar(100) default 'No',
+//     modality varchar(50) default 'Onsite',
 //     company_name varchar(255) not null,
 //     job_location varchar(255) not null,
 //     company_about varchar(255) not null,
 //     benefits varchar(255) not null,
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 //     user_id INT NOT NULL,
 //     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 
@@ -184,12 +188,12 @@ class Database{
 
 // // 8 Insert jobs
 // $sql_insert_jobs = "INSERT INTO listings (role, salary, requirements, description, remote, company_name, job_location, company_about, benefits, user_id) VALUES
-//     ('Frontend Developer', 60000, 'HTML, CSS, JavaScript', 'Develop web interfaces', 'Yes', 'TechCorp', 'New York', 'Leading tech company', 'Health insurance, 401k', 1),
-//     ('Backend Developer', 70000, 'PHP, MySQL, APIs', 'Develop server-side logic', 'No', 'SoftSolutions', 'San Francisco', 'Innovative software firm', 'Remote options, Paid vacation', 1),
-//     ('Data Analyst', 55000, 'SQL, Excel, Python', 'Analyze business data', 'Hybrid', 'DataInsights', 'Chicago', 'Data-driven analytics company', 'Gym membership, Flexible hours', 1),
-//     ('Project Manager', 65000, 'Agile, Scrum, Leadership', 'Manage projects from start to finish', 'Yes', 'BuildIt Inc.', 'Austin', 'Construction and tech projects', 'Health insurance, Bonus plan', 1),
-//     ('UX Designer', 58000, 'Figma, Adobe XD, Research', 'Design user experiences', 'Yes', 'DesignHive', 'Los Angeles', 'Creative design agency', 'Remote work, Training budget', 2),
-//     ('QA Engineer', 60000, 'Testing, Automation, Selenium', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', 'Paid time off, Health insurance', 2)
+//     ('Frontend Developer', 60000, 'HTML, CSS, JavaScript', 'Develop web interfaces', 'Yes', 'TechCorp', 'New York', 'Leading tech company', 'pto, 401k, parental leave', 1),
+//     ('Backend Developer', 70000, 'PHP, MySQL, APIs', 'Develop server-side logic', 'No', 'SoftSolutions', 'San Francisco', 'Innovative software firm', 'parental leave, vacations, 401k', 1),
+//     ('Data Analyst', 55000, 'SQL, Excel, Python', 'Analyze business data', 'Hybrid', 'DataInsights', 'Chicago', 'Data-driven analytics company', '401k, parental leave, vacations', 1),
+//     ('Project Manager', 65000, 'Agile, Scrum, Leadership', 'Manage projects from start to finish', 'Yes', 'BuildIt Inc.', 'Austin', 'Construction and tech projects', '401k, parental leave, vacations', 1),
+//     ('UX Designer', 58000, 'Figma, Adobe XD, Research', 'Design user experiences', 'Yes', 'DesignHive', 'Los Angeles', 'Creative design agency', '401k, parental leave, vacations', 2),
+//     ('QA Engineer', 60000, 'Testing, Automation, Selenium', 'Test software products', 'No', 'CodeCheck', 'Boston', 'Quality assurance firm', '401k, parental leave, vacations', 2)
 // ";
 
 // if (mysqli_query($conn, $sql_insert_jobs)) {

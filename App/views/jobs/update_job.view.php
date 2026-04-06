@@ -7,17 +7,11 @@
 
         <!-- display errors -->
 
-        <?php if(isset($errors)) : ?>
+        <?= loadPartials('errors_form', [
+            'errors' => $errors ?? []
+        ]) ?>
 
-            <?php foreach($errors as $error) : ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= $error ?>
-                </div>
-            <?php endforeach; ?>
-
-        <?php endif; ?>
-
-        <form method="POST" action="/listings/update/<?= $job->job_id ?>">
+        <form method="POST" action="/job/update/<?= $job->job_id ?>">
             <input type="hidden" name="_method" value="PUT">
             <div>
                 <h2>About the job</h2>
@@ -39,8 +33,16 @@
                     <input type="text" class="form-control" name="description" aria-describedby="description" value="<?= $job->description ?? "" ?>">
                 </div>
                 <div class="mb-3 form-check">
-                     <input type="checkbox" class="form-check-input" name="remote" value="Yes" <?= ($job->remote === "Yes") ? 'checked' : "" ?> >
-                     <label class="form-check-label" for="remote">Remote opportunity</label>
+                     <input type="radio" class="form-check-input" name="modality" value="Onsite" <?= ($job->modality === "Onsite") ? 'checked' : "" ?> >
+                     <label class="form-check-label" for="remote">Onsite</label>
+                 </div>
+                 <div class="mb-3 form-check">
+                     <input type="radio" class="form-check-input" name="modality" value="Remote" <?= ($job->modality === "Remote") ? 'checked' : "" ?> >
+                     <label class="form-check-label" for="remote">Remote</label>
+                 </div>
+                 <div class="mb-3 form-check">
+                     <input type="radio" class="form-check-input" name="modality" value="Hybrid" <?= ($job->modality === "Hybrid") ? 'checked' : "" ?> >
+                     <label class="form-check-label" for="remote">Hybrid</label>
                  </div>
 
             </div>

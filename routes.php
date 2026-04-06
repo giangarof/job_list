@@ -4,32 +4,40 @@
 $router->get('/','HomeController@index');
 
 // USER
+
+// Display 
 $router->get('/user/login', 'UserController@login');
 $router->get('/user/signup', 'UserController@signup');
 $router->get('/user/profile', 'UserController@profile');
 
-// LISTINGS
+// Authenticate the user LOGIN
+$router->post('/auth/login', 'UserController@authenticate');
+// Register new user Sign up
+$router->post('/auth/signup','UserController@store');
+
+
+// Jobs
 
 // display All jobs
-$router->get('/listings', 'ListingsController@index');
+$router->get('/jobs', 'JobsController@index');
 
 // job details by id
-$router->get('/listings/listing_details/{id}',  'ListingsController@listing_details');
+$router->get('/job/job_details/{id}',  'JobsController@job_details');
 
 // display form to create a job
-$router->get('/listings/create', 'ListingsController@create');
+$router->get('/job/create', 'JobsController@create');
 
 // submit new job
-$router->post('/listings/create', 'ListingsController@store');
+$router->post('/job/create', 'JobsController@store');
 
 // display form to edit a job
-$router->get('/listings/edit/{id}', 'ListingsController@updateJobForm');
+$router->get('/job/edit/{id}', 'JobsController@updateJobForm');
 
 // update job
-$router->put('/listings/update/{id}', 'ListingsController@updateJob');
+$router->put('/job/update/{id}', 'JobsController@updateJob');
 
 // delete job
-$router->delete('/listings/delete/{id}', 'ListingsController@deleteListing');
+$router->delete('/job/delete/{id}', 'JobsController@deleteJob');
 
 
 

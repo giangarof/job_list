@@ -1,3 +1,5 @@
+    <!-- ALERT MESSAGE -->
+    
     <?php if(isset($_SESSION['alert'])) : ?>
         <div class="p-4 bg-light">
 
