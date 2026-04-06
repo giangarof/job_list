@@ -14,7 +14,7 @@
     
     <?php loadPartials('search'); ?>
     <div class="mt-5 border border-dark p-3">
-        <a href="/listings" class="">
+        <a href="/jobs" class="">
                 See the latets jobs
         </a>
     </div>
@@ -23,7 +23,7 @@
     <!-- display randomly some jobs here -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 m-4">
 
-    <?php foreach($listings as $job) : ?>
+    <?php foreach($jobs as $job) : ?>
     <div class="col">
 
         <div class="card border-0 shadow-sm rounded-4 p-3 h-100 hover-shadow">
@@ -33,13 +33,18 @@
                 <h5 class="mb-1 fw-bold">
                     <?= $job->role ?>
                 </h5>
-                <small class="text-muted">
+
+                <small class="text-muted d-block">
                     @<?= $job->company_name ?>
+                </small>
+
+                <small class="text-muted">
+                    🕒 Posted on <?= date('M d, Y', strtotime($job->created_at)) ?>
                 </small>
             </div>
 
             <!-- Description -->
-            <div class="bg-light rounded-3 p-2 mb-3">
+            <div class="bg-light rounded-3 p-2 mb-3 text-truncate">
                 <small class="text-secondary">
                     <?= $job->description ?>
                 </small>
@@ -52,12 +57,26 @@
                 </span>
 
                 <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
-                    Remote: <?= $job->remote ?>
+                    Modality: <?= $job->modality ?>
                 </span>
             </div>
 
+            <div class="d-flex mb-2 gap-3">
+
+                    <!-- Save -->
+                    <button class="btn btn-light border rounded-circle">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </button>
+
+                    <!-- Share -->
+                    <button class="btn btn-light border rounded-circle">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </button>
+
+                </div>
+
             <!-- Button -->
-            <a href="/listings/listing_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">
+            <a href="/job/job_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">
                 Apply
             </a>
 

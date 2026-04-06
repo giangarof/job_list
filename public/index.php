@@ -6,6 +6,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 require '../helpers.php';
 use Framework\Router;
+use Framework\Database;
 
 // $config= require getBasePath('config/db.php');
 // $db = new Database($config);

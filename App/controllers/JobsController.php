@@ -5,7 +5,7 @@ use Framework\Database;
 use Framework\Validation;
 use PDO;
 
-class ListingsController{
+class JobsController{
     protected $db;
 
     public function __construct(){
@@ -15,41 +15,41 @@ class ListingsController{
 
     // Fetch all jobs
     public function index(){
-        $listings = $this->db->query("SELECT * FROM listings order by job_id desc")->fetchAll();
+        $jobs = $this->db->query("SELECT * FROM listings order by job_id desc")->fetchAll();
 
-        loadView('listings/index', ['listings' => $listings]);
+        loadView('jobs/index', ['jobs' => $jobs]);
     }
 
     // Fetch Job details
-    public function listing_details($params){
+    public function job_details($params){
         $id = $params['id'] ?? '';
         $params=[
             'id'=> $id
         ];
 
-        $listing = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
+        $job = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
 
-        if(!$listing){
+        if(!$job){
             ErrorController::error404("This job does not exist.");
             return;
         }
-        loadView('listings/listing_details', ['listing' => $listing]);
+        loadView('jobs/job_details', ['job' => $job]);
 
     }
 
     // Display create job form
     public function create(){
-        loadView('listings/create');
+        loadView('jobs/create');
     }
 
     // Delete Job
-    public function deleteListing($params){
+    public function deleteJob($params){
         $id = $params['id'] ?? '';
         $params=[
             'id'=> $id
         ];
-        $listing = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
-        if(!$listing){
+        $job = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
+        if(!$job){
             ErrorController::error404("Job doesn't exist ... ");
             return;
         }
@@ -67,7 +67,7 @@ class ListingsController{
             "salary",
             "requirements",
             "description",
-            "remote",
+            "modality",
             "company_name",
             "job_location",
             "company_about",
@@ -95,7 +95,7 @@ class ListingsController{
         $requiredFields = ["role",
             "salary",
             "requirements",
-            "description"];
+            "description", "benefits"];
                 
         $errors =[];
         foreach($requiredFields as $field){
@@ -106,7 +106,7 @@ class ListingsController{
             };
             if(!empty($errors)){
             //reload
-                loadView('listings/create', ['errors' => $errors, 'listing' => $new_listing_data]);
+                loadView('jobs/create', ['errors' => $errors, 'job' => $new_listing_data]);
             }else{
                                 
                 $fields = [];
@@ -150,7 +150,7 @@ class ListingsController{
             ErrorController::error404("This job does not exist.");
             return;
         }
-        loadview('listings/update_listing', ['job' => $job, 'benefits'=>$benefits]);
+        loadview('jobs/update_job', ['job' => $job, 'benefits'=>$benefits]);
     }
 
 
@@ -175,7 +175,7 @@ class ListingsController{
                 "salary",
                 "requirements",
                 "description",
-                "remote",
+                "modality",
                 "company_name",
                 "job_location",
                 "company_about",
@@ -185,9 +185,9 @@ class ListingsController{
         $benefitsAllowed = [
                 "401k",
                 "vacations",
-                "parental_leave",
+                "parental leave",
                 "pto",
-                "employee_discount",
+                "employee discount",
                 "relocation"
         ];
 
@@ -208,13 +208,13 @@ class ListingsController{
 
         foreach($requiredFields as $field){
             if (empty($updatedValues[$field]) || !Validation::validateString($updatedValues[$field])){
-                $errors[$field] = ucfirst($field) . " is required";
+                $errors[$field] = ucfirst($field) . " cannot be left blank.";
                 };
                         
             };
             if(!empty($errors)){
             //reload
-                loadView('listings/update_listing', ['errors' => $errors, 'job' => $job, 'benefits' => $benefits]);
+                loadView('jobs/update_job', ['errors' => $errors, 'job' => $job, 'benefits' => $benefits]);
                 exit;
             }else{
                 
@@ -229,7 +229,7 @@ class ListingsController{
                 $this->db->query($query, $updatedValues);
                 alert('success', "Job has been updated successfully!");
                    
-                redirect('/listings/listing_details/'. $id);
+                redirect('/job/job_details/'. $id);
             };
 
                            

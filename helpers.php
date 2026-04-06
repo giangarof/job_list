@@ -19,11 +19,12 @@ function loadView($name, $data=[]){
 }
 
 // Load the partials
-function loadPartials($name){
+function loadPartials($name, $data=[]){
 
     $path = getBasePath("App/views/partials/{$name}.php");
 
     if(file_exists($path)){
+        extract($data);
         require $path;
 
     } else{

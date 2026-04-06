@@ -15,7 +15,7 @@
 
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 m-4">
-    <?php foreach($listings as $job) : ?>
+    <?php foreach($jobs as $job) : ?>
         <div class="col">
     
             <div class="card border-0 shadow-sm rounded-4 p-3 h-100 hover-shadow">
@@ -44,11 +44,25 @@
                     </span>
     
                     <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
-                        Remote: <?= $job->remote ?>
+                        Remote: <?= $job->modality ?>
                     </span>
                 </div>
-    
-                <!-- Button -->
+
+                <div class="d-flex mb-2 gap-3">
+
+                    <!-- Save -->
+                    <button class="btn btn-light border rounded-circle">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </button>
+
+                    <!-- Share -->
+                    <button class="btn btn-light border rounded-circle">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </button>
+
+                </div>
+
+                <!-- Apply -->
                 <a href="/listings/listing_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">Apply</a>
                
     
