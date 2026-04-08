@@ -4,7 +4,7 @@
 
         <div class="row align-items-center text-center text-md-start">
 
-            <!-- Left: Text -->
+            <!-- Left -->
             <div class="col-md-8 mb-3 mb-md-0">
                 <h5 class="fw-bold mb-1">Looking to Hire?</h5>
                 <p class="mb-0 opacity-75">
@@ -12,7 +12,7 @@
                 </p>
             </div>
 
-            <!-- Right: CTA -->
+            <!-- Right -->
             <div class="col-md-4 text-md-end">
                 <a href="/job/create" 
                    class="btn btn-light text-primary fw-semibold rounded-3 px-4">

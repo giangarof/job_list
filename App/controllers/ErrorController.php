@@ -6,7 +6,7 @@ namespace App\Controllers;
 class ErrorController{
 
     public static function error404($message='Not found'){
-       http_response_code(404);
+        http_response_code(404);
 
         loadView('error', ['status' => '404', 'message' => $message]);
     }

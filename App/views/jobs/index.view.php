@@ -19,7 +19,9 @@
         <div class="col">
     
             <div class="card border-0 shadow-sm rounded-4 p-3 h-100 hover-shadow">
-    
+                <?php if(in_array($job->job_id, $applied_ids)): ?>
+                    <span class="position-absolute top-0 end-0 m-3 badge rounded-pill bg-success shadow-sm px-3 py-2">Applied</span>
+                <?php endif ?>
                 <!-- Title -->
                 <div class="mb-2">
                     <h5 class="mb-1 fw-bold">
@@ -51,19 +53,21 @@
                 <div class="d-flex mb-2 gap-3">
 
                     <!-- Save -->
-                    <button class="btn btn-light border rounded-circle">
-                        <i class="fa-solid fa-bookmark"></i>
-                    </button>
+                    <form method="POST" action="/job/save/<?= $job->job_id ?>">
+                        <button class="btn btn-light border rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?= in_array($job->job_id, $saved_ids) ? 'Unsave job' : 'Save job' ?>">
+                            <i class="fa-solid fa-bookmark" style="color: <?= in_array($job->job_id, $saved_ids) ? 'green' : 'none' ?>"></i>
+                        </button>
+                    </form>
 
                     <!-- Share -->
                     <button class="btn btn-light border rounded-circle">
-                        <i class="fa-solid fa-share-nodes"></i>
+                        <i class="fa-solid fa-share-nodes" ></i>
                     </button>
 
                 </div>
 
                 <!-- Apply -->
-                <a href="/listings/listing_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">Apply</a>
+                <a href="/job/job_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">See Details</a>
                
     
             </div>

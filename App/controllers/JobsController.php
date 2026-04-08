@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use Framework\Database;
 use Framework\Validation;
+use Framework\Session;
 use PDO;
 
 class JobsController{
@@ -15,25 +16,60 @@ class JobsController{
 
     // Fetch all jobs
     public function index(){
-        $jobs = $this->db->query("SELECT * FROM listings order by job_id desc")->fetchAll();
+        $userId = Session::get('user')['user']->user_id ?? '';
+        $jobs = $this->db->query("SELECT * FROM jobs order by updated_at desc")->fetchAll();
 
-        loadView('jobs/index', ['jobs' => $jobs]);
+        $exists= $this->db->query("SELECT * 
+            FROM saved_jobs 
+            WHERE user_id = :userId",[
+                'userId'=> $userId,
+            ])->fetchAll();
+        $saved_ids = array_column($exists, 'job_id');
+
+        // check if user applied 
+        $applied = $this->db->query("SELECT * 
+            FROM applied_jobs
+            WHERE user_id = :userId", [
+                 'userId'=> $userId,
+                //  'jobId' => $jobs['job_id']
+            ])->fetchAll();
+        $applied_ids = array_column($applied, 'job_id');
+
+        // inspect_and_die($saved_ids);
+
+        loadView('jobs/index', ['jobs' => $jobs, 'saved_ids' => $saved_ids, 'applied_ids' => $applied_ids]);
     }
 
     // Fetch Job details
     public function job_details($params){
+        $userId = Session::get('user')['user']->user_id ?? null;
         $id = $params['id'] ?? '';
         $params=[
             'id'=> $id
         ];
 
-        $job = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
+        $job = $this->db->query("SELECT * FROM jobs WHERE job_id = :id", $params)->fetch();
 
         if(!$job){
-            ErrorController::error404("This job does not exist.");
+            ErrorController::error404("This job does not exist... Try with other ID");
             return;
         }
-        loadView('jobs/job_details', ['job' => $job]);
+
+        // check if user applied
+        $exists = $this->db->query("SELECT * 
+            FROM applied_jobs 
+            WHERE user_id = :userId 
+            AND job_id = :jobId", [
+                'userId'=> $userId,
+                'jobId' => $job->job_id
+            ])->fetch();
+        
+            // inspect_and_die($exists);
+
+        loadView('jobs/job_details', [
+            'job' => $job,
+            'exists'=>$exists
+            ]);
 
     }
 
@@ -44,19 +80,31 @@ class JobsController{
 
     // Delete Job
     public function deleteJob($params){
-        $id = $params['id'] ?? '';
+        
+        $id = $params['id'] ?? null;
+
+        // $id = (int) $id;
         $params=[
             'id'=> $id
         ];
-        $job = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
+        $job = $this->db->query("SELECT * FROM jobs WHERE job_id = :id", $params)->fetch();
         if(!$job){
-            ErrorController::error404("Job doesn't exist ... ");
+            ErrorController::error404("Job with id: {$id} doesn't exist ... ");
             return;
         }
-        $this->db->query("Delete FROM listings WHERE job_id = :id", $params);
+        
+         // check if user is the owner
+        if(!Session::isOwner($job->user_id)){
+            alert('danger', 'You are not the post owner');
+            redirect('/');
+        }
+        
+        $this->db->query("Delete FROM jobs WHERE job_id = :id", $params);
 
         alert('success', "Job has been deleted Successfully");
         redirect('/');
+
+
     }
 
     // Store Job in DB
@@ -89,8 +137,10 @@ class JobsController{
                 
         $new_listing_data['benefits'] = implode(',', $benefits);
                 
-        $new_listing_data['user_id'] = 1;
+        $new_listing_data['user_id'] = Session::get('user')['user']->user_id;
+        // inspect_and_die(Session::get('user')['user']->user_id);
         $new_listing_data=array_map('sanitizeData', $new_listing_data);
+        // inspect_and_die($new_listing_data);
                 
         $requiredFields = ["role",
             "salary",
@@ -125,7 +175,7 @@ class JobsController{
             };
             $values = implode(',', $values);
                                             
-            $query = "INSERT INTO listings ({$fields}) VALUES ({$values})";
+            $query = "INSERT INTO jobs ({$fields}) VALUES ({$values})";
                            
             $this->db->query($query, $new_listing_data);
                 
@@ -143,7 +193,15 @@ class JobsController{
         $params=[
             'id'=> $id
         ];
-        $job = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
+        $job = $this->db->query("SELECT * FROM jobs WHERE job_id = :id", $params)->fetch();
+
+
+        // check if the current user owns the job post
+        if(!Session::isOwner($job->user_id)){
+            alert('danger', 'You are not the post owner');
+            redirect('/');
+        }
+
         $benefits = explode(',', $job->benefits ?? "");
         // inspect_and_die($job);
         if(!$job){
@@ -161,13 +219,20 @@ class JobsController{
         $params=[
             'id'=> $id
         ];
-        $job = $this->db->query("SELECT * FROM listings WHERE job_id = :id", $params)->fetch();
+        $job = $this->db->query("SELECT * FROM jobs WHERE job_id = :id", $params)->fetch();
         $benefits = explode(',', $job->benefits ?? "");
         // inspect_and_die($job);
         if(!$job){
             ErrorController::error404("This job does not exist.");
             return;
         }
+        
+        // check if user is the owner
+        if(!Session::isOwner($job->user_id)){
+            alert('danger', 'You are not the post owner');
+            redirect('/');
+        }
+        
         $_POST['remote'] = isset($_POST['remote']) ? 'Yes' : 'No';
 
         $allowedFields=[
@@ -223,8 +288,9 @@ class JobsController{
                     $updateFields[] = "{$field} = :{$field}";
                 }
                 $updateFields = implode(',', $updateFields);
-                $query = "UPDATE listings SET $updateFields WHERE job_id = :id";
-                $updatedValues['id'] = $id;                
+                $query = "UPDATE jobs SET $updateFields WHERE job_id = :id";
+                $updatedValues['id'] = $id;
+
                 // inspect_and_die($updatedValues);
                 $this->db->query($query, $updatedValues);
                 alert('success', "Job has been updated successfully!");
@@ -237,6 +303,229 @@ class JobsController{
         
             
     }
+
+
+    // search functionality
+    public function search(){
+        $userId = Session::get('user')['user']->user_id ?? '';
+        $keywords = isset($_GET['keywords']) ? trim($_GET['keywords']) : '';
+
+        $query = "SELECT * FROM jobs WHERE 
+        role LIKE :keywords OR 
+        salary LIKE :keywords OR 
+        requirements LIKE :keywords OR 
+        description LIKE :keywords OR 
+        modality LIKE :keywords OR 
+        company_name LIKE :keywords OR
+        job_location LIKE :keywords order by updated_at desc";
+
+        $params = [
+            'keywords' => "%{$keywords}%"
+        ];
+
+        $jobs = $this->db->query($query, $params)->fetchAll();
+
+        // check if user saved it
+        $exists= $this->db->query("SELECT * 
+            FROM saved_jobs 
+            WHERE user_id = :userId",[
+                'userId'=> $userId,
+            ])->fetchAll();
+        $saved_ids = array_column($exists, 'job_id');
+
+        //check if user applied it
+        $applied = $this->db->query("SELECT * 
+            FROM applied_jobs
+            WHERE user_id = :userId", [
+                 'userId'=> $userId,
+                //  'jobId' => $jobs['job_id']
+            ])->fetchAll();
+        $applied_ids = array_column($applied, 'job_id');
+
+
+        loadView('jobs/index', ['jobs' => $jobs, 'saved_ids' => $saved_ids, 'applied_ids' => $applied_ids]);
+        
+    }
+
+
+    public function saveJob($params){
+        $id = $params['id'] ?? '';
+        $params=[
+            'id'=> $id
+        ];
+
+        $user_id = Session::get('user')['user']->user_id;
+
+        $job = $this->db->query("SELECT * FROM jobs WHERE job_id = :id", $params)->fetch();
+
+        $exists = $this->db->query(
+            "SELECT * FROM saved_jobs WHERE user_id = :user_id AND job_id = :job_id",
+            [
+                'user_id' => $user_id,
+                'job_id' => $job->job_id
+            ]
+        )->fetch();
+
+        
+
+        // if it doesn't exist
+        if(!$job){
+            
+            alert('danger', 'This job does not exist...');
+            redirect('/');
+        }
+
+        // If exist, toggle it
+        if($exists){
+            $this->db->query(
+                "DELETE FROM saved_jobs WHERE user_id = :user_id AND job_id = :job_id",
+                [
+                    'user_id' => $user_id,
+                    'job_id' => $job->job_id
+                ]
+            );
+
+            alert('success', 'Job unsaved');
+            redirect($_SERVER['HTTP_REFERER']);
+
+        } else {
+            // if it doesnt exist, add the saved
+
+            // Insert 
+            $query = "INSERT INTO saved_jobs (job_id, user_id) VALUES(:job_id, :user_id)";
+            $values = [
+                "job_id" => $job->job_id,
+                "user_id" => $user_id,
+            ];
+            $saved = $this->db->query($query, $values);
+            
+            alert('success', 'Job saved successfully');
+            redirect($_SERVER['HTTP_REFERER']);
+        } 
+        
+
+    }
+
+
+    public function applyJob($params){
+        
+        $id = $params['id'] ?? '';
+        $params=[
+            'id'=> $id
+        ];
+        $user_id = Session::get('user')['user']->user_id;
+
+        $job = $this->db->query("SELECT * FROM jobs WHERE job_id = :id", $params)->fetch();
+        
+
+        // if it doesn't exist
+        if(!$job){
+            
+            alert('danger', 'This job does not exist...');
+            redirect('/');
+        }
+
+        // check if applied 
+        $exists = $this->db->query(
+            "SELECT * FROM applied_jobs WHERE user_id = :user_id AND job_id = :job_id",
+            [
+                'user_id' => $user_id,
+                'job_id' => $job->job_id
+            ]
+        )->fetch();
+
+        // if applied, remove it
+        if($exists){
+            $this->db->query(
+                "DELETE FROM applied_jobs WHERE user_id = :user_id AND job_id = :job_id",
+                [
+                    'user_id' => $user_id,
+                    'job_id' => $job->job_id
+                ]
+            );
+
+            alert('success', 'Application cancelled');
+            redirect($_SERVER['HTTP_REFERER']);
+        }else {
+            //otherwise, insert it
+            // if it doesnt exist, add the saved
+
+            // Insert 
+            $query = "INSERT INTO applied_jobs (job_id, user_id, status) VALUES(:job_id, :user_id, :status)";
+            $values = [
+                "job_id" => $job->job_id,
+                "user_id" => $user_id,
+                "status" => 'Pending'
+            ];
+            $saved = $this->db->query($query, $values);
+            
+            alert('success', "You've applied successfully");
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+       
+        
+    
+    }
+
+
+    public function updateJobStatus($params){
+       inspect_and_die('ok');
+
+    }
+
+
+    public function cancelJobApplication($params){
+        $owner_id = Session::get('user')['user']->user_id;
+        $applicant_id = $params['user_id'];
+        
+        // job id from params
+        $id = $params['id'] ?? '';
+        $params=[
+            'id'=> $id
+        ];
+
+        // check if job exist
+        $job = $this->db->query("SELECT * FROM applied_jobs a
+            JOIN jobs j
+            ON a.job_id = j.job_id
+            WHERE a.job_id = :id", $params)->fetch();
+
+        if(!$job){
+            ErrorController::error404("Job with id {$id} doesn't exist ... ");
+            return;
+        } 
+
+        // check if user is the owner
+        $belongs_to_owner = $this->db->query("
+        SELECT j.job_id as job_id_JOB, a.job_id as job_id_APPLIED, a.user_id as applicant, j.role, j.user_id as owner_id
+        FROM jobs j
+        JOIN applied_jobs a
+        ON j.job_id = a.job_id
+        WHERE j.user_id = :ownerId
+        AND j.job_id = :id
+        ", [
+            'ownerId' => $owner_id,
+            'id' => $id
+        ])->fetch();
+
+        if(!$belongs_to_owner){
+            ErrorController::error403("Unauthorized.");
+            return;
+        }
+
+        // check that the applicant did apply 
+        // cancel application
+        
+
+
+       
+
+
+    }
+
+    
+
+
 }
 
 ?>

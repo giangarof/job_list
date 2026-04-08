@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use Framework\Database;
 use Framework\Validation;
+use Framework\Session;
 use PDO;
 
 class HomeController{
@@ -14,10 +15,30 @@ class HomeController{
     }
 
     public function index(){
-        $jobs = $this->db->query("SELECT * FROM listings order by job_id desc LIMIT 6")->fetchAll();
+        $userId = Session::get('user')['user']->user_id ?? '';
+        $jobs = $this->db->query("SELECT * FROM jobs order by updated_at desc LIMIT 6")->fetchAll();
         // inspect($jobs);
 
-        loadView('home', ['jobs' => $jobs]);
+        // check if user saved it
+        $saved = $this->db->query("SELECT * 
+            FROM saved_jobs 
+            WHERE user_id = :userId",[
+                'userId'=> $userId,
+            ])->fetchAll();
+        $saved_ids = array_column($saved, 'job_id');
+
+
+        // check if user applied 
+        $applied = $this->db->query("SELECT * 
+            FROM applied_jobs
+            WHERE user_id = :userId", [
+                 'userId'=> $userId,
+                //  'jobId' => $jobs['job_id']
+            ])->fetchAll();
+        $applied_ids = array_column($applied, 'job_id');
+
+        // inspect_and_die($applied_ids);
+        loadView('home', ['jobs' => $jobs, 'saved_ids' => $saved_ids, 'applied_ids' => $applied_ids]);
     }
 
 }

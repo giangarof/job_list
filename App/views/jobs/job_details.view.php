@@ -8,13 +8,14 @@
 
     <div class="card border-0 shadow-sm rounded-4 p-4 position-relative">
 
+        <?php if(Framework\Session::isOwner($job->user_id)) : ?>
         <div class="position-absolute top-0 end-0 m-3 d-flex gap-2">
             <a href="/job/edit/<?= $job->job_id ?>" 
                class="btn btn-sm btn-warning rounded-3">
                 ✏️ Update
             </a>
 
-            <form action="/job/delete/<?= $job->job_id ?>" method="POST">
+            <form method="POST" action="/job/delete/<?= $job->job_id ?>">
                 <input type="hidden" name="_method" value="DELETE">
                 <button type="submit" 
                         class="btn btn-sm btn-danger rounded-3"
@@ -23,6 +24,7 @@
                 </button>
             </form>
         </div>
+        <?php endif; ?>
 
         <!-- Job Info -->
         <h4 class="fw-bold mb-3">💼 About the Job</h4>
@@ -107,9 +109,11 @@
         <div class="d-flex mb-2 gap-3">
 
             <!-- Save -->
-            <button class="btn btn-light border rounded-circle">
-                <i class="fa-solid fa-bookmark"></i>
-            </button>
+            <form method="POST" action="/job/save/<?= $job->job_id ?>">
+                <button class="btn btn-light border rounded-circle">
+                    <i class="fa-solid fa-bookmark"></i>
+                </button>
+            </form>
 
             <!-- Share -->
             <button class="btn btn-light border rounded-circle">
@@ -117,12 +121,21 @@
             </button>
 
         </div>
+        
+        <?php if($exists) : ?>
+            <!-- Apply Button -->
+            <form method="POST" action="/job/apply/<?= $job->job_id ?>">
+                <button class="btn btn-outline-danger w-100 rounded-3">Cancel application</button>
+            </form>
 
-        <!-- Apply Button -->
-        <a href="/apply/<?= $job->id ?>" 
-           class="btn btn-primary w-100 rounded-3 mt-3">
-            Apply Now 
-        </a>
+        <?php else : ?>
+            <!-- Apply Button -->
+            <form method="POST" action="/job/apply/<?= $job->job_id ?>">
+                <button class="btn btn-primary w-100 rounded-3 mt-3">Apply Now</button>
+            </form>
+
+        <?php endif; ?>
+        
 
     </div>
 </section>

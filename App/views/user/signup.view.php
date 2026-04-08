@@ -4,7 +4,7 @@
 <section class="py-5">
     
     <div class="container">
-         <?= loadPartials('errors_form', [
+        <?= loadPartials('errors_form', [
             'errors' => $errors ?? []
         ]) ?>
         <h1>Signup</h1>
@@ -12,16 +12,16 @@
         <form method="POST" action="/auth/signup">
             <div class="mb-3">
                 <label for="name" class="form-label">Your name</label>
-                <input type="text" class="form-control" id="name" aria-describedby="name" name="name">
+                <input type="text" class="form-control" id="name" aria-describedby="name" name="name" value="<?= $user['name'] ?? "" ?>">
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" aria-describedby="email" name="email">
+                <input type="email" class="form-control" id="email" aria-describedby="email" name="email" value="<?= $user['email'] ?? "" ?>">
                 <div id="email" class="form-text">We'll never share your email with anyone else.</div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <input type="password" class="form-control" id="password" name="password" >
             </div>
             <div class="mb-3">
                 <label for="passwordConfirmation" class="form-label">Password Confirmation</label>

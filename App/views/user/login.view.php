@@ -3,16 +3,19 @@
 
 <section class="py-5">
     <div class="container">
+        <?= loadPartials('errors_form', [
+            'errors' => $errors ?? []
+        ]) ?>
         <h1>Login</h1>
 
-        <form method="POST" action="/auth/login">
+        <form method="POST" action="/auth/loginPost">
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" aria-describedby="email" name="email">
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
             </div>
             <p>Don't you have an account yet? <a href="/user/signup">Sign up here!</a></p>
             <button type="submit" class="btn btn-primary">Submit</button>

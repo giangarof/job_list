@@ -32,6 +32,11 @@ class Validation{
 
     }
 
+    public static function verifyPassword($value1, $value2){
+        return password_verify($value1, $value2);
+
+    }
+
 }
 
 

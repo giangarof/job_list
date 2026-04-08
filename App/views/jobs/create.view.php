@@ -34,16 +34,16 @@
                 <div>
                     <h2>Modality</h2>
                     <div class="mb-3 form-check">
-                        <input type="radio" class="form-check-input" name="remote" value="Onsite" id="onsite">
-                        <label class="form-check-label" for="remote">Onsite opportunity</label>
+                        <input type="radio" class="form-check-input" name="modality" value="Onsite" id="onsite">
+                        <label class="form-check-label" for="modality">Onsite opportunity</label>
                      </div>
                     <div class="mb-3 form-check">
-                        <input type="radio" class="form-check-input" name="remote" value="Remote" id="remote">
-                        <label class="form-check-label" for="remote">Remote opportunity</label>
+                        <input type="radio" class="form-check-input" name="modality" value="Remote" id="remote">
+                        <label class="form-check-label" for="modality">Remote opportunity</label>
                      </div>
                      <div class="mb-3 form-check">
-                        <input type="radio" class="form-check-input" name="remote" value="Hybrid" id="hybrid">
-                        <label class="form-check-label" for="remote">Hybrid opportunity</label>
+                        <input type="radio" class="form-check-input" name="modality" value="Hybrid" id="hybrid">
+                        <label class="form-check-label" for="modality">Hybrid opportunity</label>
                      </div>
                 </div>
 
