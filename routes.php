@@ -11,10 +11,11 @@ $router->get('/user/signup', 'UserController@signup');
 $router->get('/user/profile', 'UserController@profile');
 
 // Authenticate the user LOGIN
-$router->post('/auth/login', 'UserController@authenticate');
+$router->post('/auth/loginPost', 'UserController@authenticate');
 // Register new user Sign up
 $router->post('/auth/signup','UserController@store');
-
+// Logout user
+$router->post('/auth/logout','UserController@logout');
 
 // Jobs
 

@@ -59,15 +59,16 @@ class Database{
                 name VARCHAR(255) NOT NULL,
                 email varchar(255) unique,
                 password varchar(255) not null,
+                agreement varchar(100) not null,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
             $this->conn->exec($sql_users_table);
             echo "Users table created successfully.\n";
 
             // Insert Users
-            $sql_insert_users = "INSERT INTO users (name, email, password) VALUES
-            ('jhon', 'jhon@example.com', '12345'),
-            ('jane', 'jane@example.com', '12345')";
+            $sql_insert_users = "INSERT INTO users (name, email, password, agreement) VALUES
+            ('jhon', 'jhon@example.com', '12345', 'agree'),
+            ('jane', 'jane@example.com', '12345', 'agree')";
             $this->conn->exec($sql_insert_users);
             echo "Users inserted successfully.\n";
 

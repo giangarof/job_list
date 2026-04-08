@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use Framework\Database;
 use Framework\Validation;
+use Framework\Session;
 
 class UserController{
     protected $db;
@@ -39,6 +40,7 @@ class UserController{
         if(!Validation::ValidateEmail($email)){
             $errors['email'] = "Please, enter a valid email.";
         }
+
         if(!Validation::validateString($password,2,50)){
             $errors['password'] = "Please, password muste be between 2 and 50 characters.";
         }
@@ -56,16 +58,93 @@ class UserController{
             loadView('user/signup', [
                 'errors'=>$errors,
                 'user'=>[
-                    'name'=>$name
+                    'name'=>$name,
+                    'email'=>$email
                 ]
             ]);
             exit;
         }
 
+        // check if email is in DB
+        $params = [
+            'email'=> $email
+        ];
 
+        $user = $this->db->query('Select * from users where email = :email', $params)->fetch();
+
+        if($user){
+            $errors['email'] = 'Email already registered, please use another one.';
+            loadView('user/signup', [
+                'errors'=>$errors,
+                
+            ]);
+            exit;
+        }
+
+
+        // create account
+        $params = [
+            'name'=>$name,
+            'email'=>$email,
+            'password'=> password_hash($password, PASSWORD_DEFAULT),
+            'agreement'=>$agreement
+        ];
         
 
+        $this->db->query('INSERT INTO users (name, email, password, agreement) VALUES (:name, :email, :password, :agreement)', $params);
 
+        alert('success', 'User created successfully. Please, Login.');
+        redirect('/user/login');
+
+    }
+
+    public function authenticate(){
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        $errors=[];
+        
+        $params = [
+            'email'=> $email
+        ];
+        $user = $this->db->query('Select * from users where email = :email', $params)->fetch();
+        
+        if(!Validation::ValidateEmail($email)){
+            $errors['email'] = "Please, enter a valid email.";
+        }
+
+        if(!$user || !Validation::verifyPassword($password, $user->password)){
+            $errors['auth'] = "Incorrect credentials. Try again.";
+        }
+
+        if(!empty($errors)){
+            loadView('user/login', [
+                'errors'=>$errors,
+                'user'=>[
+                    'email'=>$email,
+                ]
+            ]);
+            exit;
+        }
+        unset($user->password);
+        Session::set('user', [
+            'user'=>$user
+        ]);
+
+        // inspect_and_die(Session::get('user'));
+        redirect('/user/profile');
+        
+    }
+
+
+    public function logout(){
+        // alert('success', "You've been logged out successfully.");
+        Session::clearAll();
+        
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 86400, $params['path'], $params['domain']);
+        redirect('/user/login');
+        
     }
 }
 
