@@ -14,7 +14,7 @@ class HomeController{
     }
 
     public function index(){
-        $jobs = $this->db->query("SELECT * FROM listings order by job_id desc LIMIT 6")->fetchAll();
+        $jobs = $this->db->query("SELECT * FROM jobs order by updated_at desc LIMIT 6")->fetchAll();
         // inspect($jobs);
 
         loadView('home', ['jobs' => $jobs]);

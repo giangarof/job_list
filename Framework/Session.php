@@ -34,6 +34,25 @@ class Session{
         session_unset();
         session_destroy();
     }
+
+    public static function isOwner($id){
+        //check if there is a user and an array of user
+        if (!isset($_SESSION['user']) || !isset($_SESSION['user']['user'])) {
+            return false;
+        }
+        
+        // create variable
+        $session_user = $_SESSION['user']['user'];
+
+        // check if is false
+        if (!isset($session_user->user_id)) {
+            return false;
+        }
+
+        // check id's
+        return (int)$session_user->user_id === (int)$id;
+        
+    }
 }
 
 

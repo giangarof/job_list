@@ -21,7 +21,60 @@ class UserController{
         loadView("/user/signup");
     }
     public function profile(){
-        loadView("/user/profile");
+
+        $user = Session::get('user');
+        $query = "SELECT * FROM jobs WHERE user_id = {$user['user']->user_id} ORDER BY updated_at desc";
+        $jobs = $this->db->query($query)->fetchAll();
+
+        $query2 = "SELECT job.*, saved.* 
+            FROM saved_jobs saved 
+            JOIN jobs job
+            ON saved.job_id = job.job_id
+            WHERE saved.user_id = {$user['user']->user_id} 
+            ORDER BY updated_at DESC";
+        $saved =  $this->db->query($query2)->fetchAll();
+
+        $query3 = "SELECT job.*, apply.* 
+            FROM applied_jobs apply
+            JOIN jobs job
+            ON apply.job_id = job.job_id
+            WHERE apply.user_id = :user_id 
+            ORDER BY updated_at DESC";
+        $applied =  $this->db->query($query3,[
+            'user_id' => $user['user']->user_id
+        ])->fetchAll();
+
+
+        $applied_ids = array_column($applied,'job_id');
+
+
+
+        // table
+        $applicants = $this->db->query(
+            "SELECT 
+                a.user_id,
+                a.job_id,
+                a.status,
+                j.role,
+                j.company_name,
+                j.salary,
+                u.name AS user_name
+            FROM applied_jobs a
+            JOIN jobs j ON a.job_id = j.job_id
+            JOIN users u ON a.user_id = u.user_id
+            WHERE j.user_id = :owner_id
+            ORDER BY applied_at DESC",
+            ['owner_id' => $user['user']->user_id]
+        )->fetchAll();
+        
+        loadView("/user/profile", [
+            'user'=> $user,
+            'jobs'=> $jobs,
+            'saved' => $saved,
+            'applied' => $applied,
+            'applied_ids' => $applied_ids,
+            'applicants' => $applicants
+        ]);
     }
 
     public function store(){

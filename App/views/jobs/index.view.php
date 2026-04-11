@@ -63,7 +63,7 @@
                 </div>
 
                 <!-- Apply -->
-                <a href="/listings/listing_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">Apply</a>
+                <a href="/job/job_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">See Details</a>
                
     
             </div>

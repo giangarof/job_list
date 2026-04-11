@@ -64,9 +64,12 @@
             <div class="d-flex mb-2 gap-3">
 
                     <!-- Save -->
-                    <button class="btn btn-light border rounded-circle">
-                        <i class="fa-solid fa-bookmark"></i>
-                    </button>
+                    <form method="POST" action="/job/save/<?= $job->job_id ?>">
+
+                        <button class="btn btn-light border rounded-circle">
+                            <i class="fa-solid fa-bookmark"></i>
+                        </button>
+                    </form>
 
                     <!-- Share -->
                     <button class="btn btn-light border rounded-circle">
@@ -77,7 +80,7 @@
 
             <!-- Button -->
             <a href="/job/job_details/<?= $job->job_id ?>" class="btn btn-primary w-100 rounded-3">
-                Apply
+                Job Details
             </a>
 
         </div>
