@@ -469,19 +469,69 @@ class JobsController{
 
 
     public function updateJobStatus($params){
-       inspect_and_die('ok');
+        $owner_id = Session::get('user')['user']->user_id;
+        $job_id = $params['id'] ?? null;
+        $applicant_id = $_POST['applicant_id'] ?? null;
+        $status = $_POST['status'] ?? null;
+
+        // check if job exist
+        $job = $this->db->query("SELECT * FROM applied_jobs a
+            JOIN jobs j
+            ON a.job_id = j.job_id
+            WHERE a.job_id = :id", $params)->fetch();
+
+        if(!$job){
+            ErrorController::error404("Job with id {$id} doesn't exist ... ");
+            return;
+        }
+        
+        // check if user (logged) is the owner
+        $belongs_to_owner = $this->db->query("
+            SELECT *
+            FROM jobs j
+            JOIN applied_jobs a
+            ON j.job_id = a.job_id
+            WHERE j.user_id = :ownerId
+            AND j.job_id = :id
+            ", [
+                'ownerId' => $owner_id,
+                'id' => $job_id
+            ])->fetch();
+
+        if(!$belongs_to_owner){
+            ErrorController::error403("Unauthorized.");
+            return;
+        }
+
+
+        // Update application
+        $this->db->query("
+            UPDATE applied_jobs
+            SET status = :status
+            WHERE job_id = :jobId
+            AND user_id = :applicantId
+        ", [
+            'status' => $status,
+            'jobId' => $job_id,
+            'applicantId' => $applicant_id
+        ]);
+
+        alert('success', "Application updated");
+        redirect($_SERVER['HTTP_REFERER']);
 
     }
 
 
     public function cancelJobApplication($params){
         $owner_id = Session::get('user')['user']->user_id;
-        $applicant_id = $params['user_id'];
         
         // job id from params
         $id = $params['id'] ?? '';
+        $applicant_id = $_POST['applicant_id'];
+        
         $params=[
-            'id'=> $id
+            'id'=> $id,
+           
         ];
 
         // check if job exist
@@ -495,9 +545,9 @@ class JobsController{
             return;
         } 
 
-        // check if user is the owner
+        // check if user (logged) is the owner
         $belongs_to_owner = $this->db->query("
-        SELECT j.job_id as job_id_JOB, a.job_id as job_id_APPLIED, a.user_id as applicant, j.role, j.user_id as owner_id
+        SELECT *
         FROM jobs j
         JOIN applied_jobs a
         ON j.job_id = a.job_id
@@ -513,13 +563,17 @@ class JobsController{
             return;
         }
 
-        // check that the applicant did apply 
         // cancel application
-        
-
-
+        $this->db->query("DELETE FROM applied_jobs
+            WHERE job_id = :jobId
+            AND user_id = :applicantID
+        ", [
+            'jobId' => $id,
+            'applicantID' => $applicant_id
+        ]);
        
-
+        alert('success', "Application cancelled");
+        redirect($_SERVER['HTTP_REFERER']);
 
     }
 

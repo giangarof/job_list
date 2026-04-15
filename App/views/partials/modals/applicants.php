@@ -22,10 +22,12 @@
 
             <thead class="table-light">
               <tr>
-                <th>User</th>
+                <th># Application</th>
+                <th># User</th>
+                <th>Name</th>
                 <th>Role</th>
                 <th>Company</th>
-                <th>Salary</th>
+                <!-- <th>Salary</th> -->
                 <th style="min-width: 220px;">Update</th>
                 <th>Cancel Application</th>
               </tr>
@@ -45,10 +47,12 @@
                 ?>
 
                 <tr>
+                  <td class="fw-semibold"><?= $a->id ?></td>
+                  <td class="fw-semibold"><?= $a->user_id ?></td>
                   <td class="fw-semibold"><?= $a->user_name ?></td>
                   <td><?= $a->role ?></td>
                   <td class="text-muted"><?= $a->company_name ?></td>
-                  <td>$<?= number_format($a->salary) ?></td>
+                  <!-- <td>$<?= number_format($a->salary) ?></td> -->
 
                   <!-- Status -->
 
@@ -56,6 +60,7 @@
                   <td>
                     <form method="POST" action="/job/application/update-status/<?= $a->job_id ?>" class="d-flex gap-2">
                         <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="applicant_id" value="<?= $a->user_id ?>">
                         <select name="status" class="form-select form-select-sm">
                             <option value="Pending" <?= $a->status == 'Pending' ? 'selected' : '' ?>>Pending</option>
                             <option value="Reviewing" <?= $a->status == 'Reviewing' ? 'selected' : '' ?>>Reviewing</option>
@@ -74,7 +79,7 @@
                   <td>
                     <form method="POST" action="/job/application/delete/<?= $a->job_id ?>"  >
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="user_id" value="<?= $a->user_id ?>">
+                        <input type="hidden" name="applicant_id" value="<?= $a->user_id ?>">
                         <button type="submit" 
                                 class="btn btn-sm btn-outline-danger "
                                 style="width: 36px; height: 36px;"

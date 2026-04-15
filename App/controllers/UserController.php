@@ -20,6 +20,7 @@ class UserController{
     public function signup(){
         loadView("/user/signup");
     }
+
     public function profile(){
 
         $user = Session::get('user');
@@ -51,7 +52,8 @@ class UserController{
 
         // table
         $applicants = $this->db->query(
-            "SELECT 
+            "SELECT
+                a.id,
                 a.user_id,
                 a.job_id,
                 a.status,
@@ -66,7 +68,7 @@ class UserController{
             ORDER BY applied_at DESC",
             ['owner_id' => $user['user']->user_id]
         )->fetchAll();
-        
+        //  inspect_and_die($applicants);
         loadView("/user/profile", [
             'user'=> $user,
             'jobs'=> $jobs,
@@ -75,6 +77,7 @@ class UserController{
             'applied_ids' => $applied_ids,
             'applicants' => $applicants
         ]);
+       
     }
 
     public function store(){
