@@ -11,5 +11,8 @@
 			"Framework\\": "Framework/",
 			"App\\": "App/"
 		}
+	},
+	"require": {
+		"phpmailer/phpmailer": "^7.0"
 	}
 }

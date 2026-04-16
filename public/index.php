@@ -8,9 +8,11 @@ require '../helpers.php';
 use Framework\Router;
 use Framework\Database;
 use Framework\Session;
+use Framework\Env;
 
 Session::start_session();
-// inspect(session_status());
+Env::load(__DIR__ . '/../config/.env');
+// inspect(__DIR__ . '/../config/.env');
 
 // $config= require getBasePath('config/db.php');
 // $db = new Database($config);

@@ -12,6 +12,8 @@ $router->get('/','HomeController@index');
 $router->get('/user/login', 'UserController@login', ['guest']);
 $router->get('/user/signup', 'UserController@signup', ['guest']);
 $router->get('/user/profile', 'UserController@profile', ['auth']);
+$router->get('/request', 'UserController@requestForm');
+$router->get('/reset-password', 'UserController@showResetForm');
 
 
                 // Actions
@@ -21,6 +23,10 @@ $router->post('/auth/loginPost', 'UserController@authenticate',['guest']);
 $router->post('/auth/signup','UserController@store',['guest']);
 // Logout user
 $router->post('/auth/logout','UserController@logout', ['auth']);
+// Generate token to restore password
+$router->post('/request_token', 'UserController@requestToken');
+
+$router->post('/updatepsw', 'UserController@restorePasswordAction');
 
 
 

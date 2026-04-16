@@ -4,6 +4,7 @@ namespace App\Controllers;
 use Framework\Database;
 use Framework\Validation;
 use Framework\Session;
+use App\Services\MailService;
 
 class UserController{
     protected $db;
@@ -11,6 +12,10 @@ class UserController{
     public function __construct(){
         $config= require getBasePath('config/db.php');
         $this->db = new Database($config);
+    }
+
+    public function requestForm(){
+        loadView("/user/restore/requestPassword");
     }
 
     public function login(){
@@ -202,6 +207,179 @@ class UserController{
         redirect('/user/login');
         
     }
+
+    // Request method, because youre requesting a token to restore your password
+    // this fucntion generates the token to restore password
+    public function requestToken(){
+
+        $baseUrl = "http://" . $_SERVER['HTTP_HOST'];
+        
+        $email = $_POST['email'] ?? null;
+
+
+        // set errors
+        $errors = [];
+
+        if(!Validation::ValidateEmail($email)){
+            $errors['email'] = "Please, enter a valid email.";
+        }
+
+        if(!empty($errors)){
+            loadView('user/restore/requestPassword', [
+                'errors'=>$errors,
+            ]);
+            exit;
+        }
+
+
+        // Steps to generate a token
+
+        // 1 Check if user with this emails is in db
+        $user = $this->db->query("
+            SELECT * FROM users WHERE email = :email
+        ", [
+            'email' => $email
+        ])->fetch();
+
+        if(!$user){
+            return forgetSuccess();
+        }
+
+        // 2 Generate the token
+        $token = bin2hex(random_bytes(32));
+        $tokenHash = hash('sha256', $token);
+
+        // 3 store the token in db
+        $this->db->query("
+            INSERT INTO password_reset (user_id, tokenHashed, expires_at)
+            VALUES (:user_id, :token, :expires_at)
+        ", [
+            'user_id' => $user->user_id,
+            'token' => $tokenHash,
+            'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour'))
+        ]);
+
+        // 4. Send email (pseudo - adapt to your system)
+        $resetLink = $baseUrl . "/reset-password?token=" . $token;
+        // inspect_and_die($resetLink);
+        $mail = MailService::sendEmail($email, "reset Password", $resetLink);
+        // sendMail(
+        //     $email,
+        //     "Password Reset",
+        //     "Click here to reset your password: " . $resetLink,
+        // );
+
+        // 5. Always respond same way
+        return forgetSuccess();
+
+    }
+
+    public function showResetForm(){
+        $token = $_GET['token'] ?? null;
+
+        if (!$token) {
+            ErrorController::error400("Invalid token.");
+            return;
+        }
+
+        // hash token to compare with DB
+        $tokenHash = hash('sha256', $token);
+
+        // find both hashed tokens
+        $reset = $this->db->query("
+            SELECT *
+            FROM password_reset
+            WHERE tokenHashed = :token
+            AND expires_at > NOW()
+        ", [
+            'token' => $tokenHash
+        ])->fetch();
+
+        if (!$reset) {
+            ErrorController::error403("Token invalid or expired.");
+            return;
+        }
+        return loadView("/user/restore/newPassword", [
+            'token' => $token
+        ]);
+
+        
+    }
+
+    public function restorePasswordAction(){
+
+        $token = $_POST['token'] ?? null;
+        $password = $_POST['password'] ?? null;
+        $confirm = $_POST['confirm_password'] ?? null;
+
+        // check for errors
+        $errors=[];
+
+        if(!$token){
+            redirect('/');
+        }
+
+        if(!$password || !$confirm){
+            $errors['password'] = "Missing fields. Try again.";
+        }
+
+        if(!Validation::matchValue($password, $confirm)){
+            $errors['passwordConfirmation'] = "Password and password confirmation should match. Try again.";
+        }
+
+        if(!empty($errors)){
+            loadView('user/restore/newPassword', [
+                'errors'=>$errors,
+                
+            ]);
+            exit;
+        }
+
+        // hash token
+        $tokenHash = hash('sha256', $token);
+
+        // find (token) reset request
+        $reset = $this->db->query("
+            SELECT *
+            FROM password_reset
+            WHERE tokenHashed = :token
+            AND expires_at > NOW()
+        ", [
+            'token' => $tokenHash
+        ])->fetch();
+
+        if (!$reset) {
+            return ErrorController::error403("Invalid or expired token.");
+        }
+
+        // hash the new password
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        // update user password
+        $this->db->query("
+            UPDATE users
+            SET password = :password
+            WHERE user_id = :user_id
+        ", [
+            'password' => $passwordHash,
+            'user_id' => $reset->user_id
+        ]);
+
+        // delete reset token (important)
+        $this->db->query("
+            DELETE FROM password_reset
+            WHERE user_id = :user_id
+        ", [
+            'user_id' => $reset->user_id
+        ]);
+
+        alert('success', 'Password updated. Please, Login.');
+        redirect('/user/login');
+
+
+        
+    }
+
 }
 
 ?>

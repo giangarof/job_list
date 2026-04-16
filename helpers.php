@@ -74,4 +74,11 @@ function alert($type, $msg){
     return;
 }
 
+
+function forgetSuccess(){
+    alert('success', 'If an account exists, a reset link has been sent.');
+    redirect($_SERVER['HTTP_REFERER']);
+    return;
+}
+
 ?>

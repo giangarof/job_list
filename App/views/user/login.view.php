@@ -19,7 +19,7 @@
             </div>
             <p>Don't you have an account yet? <a href="/user/signup">Sign up here!</a></p>
             <button type="submit" class="btn btn-primary">Submit</button>
-            <p class="mt-3">Forgot your password? <a href="">Restore it!</a></p>
+            <p class="mt-3">Forgot your password? <a href="/request">Restore it!</a></p>
         </form>
     </div>
 </section>
