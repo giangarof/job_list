@@ -16,7 +16,7 @@ class JobsController{
 
     // Fetch all jobs
     public function index(){
-        $userId = Session::get('user')['user']->user_id ?? '';
+        $userId = Session::get('user')['user']->user_id ?? null;
         $jobs = $this->db->query("SELECT * FROM jobs order by updated_at desc")->fetchAll();
 
         $exists= $this->db->query("SELECT * 
@@ -307,43 +307,54 @@ class JobsController{
 
     // search functionality
     public function search(){
-        $userId = Session::get('user')['user']->user_id ?? '';
+        // $userId = Session::get('user')['user']->user_id ?? null;
+        $user = Session::get('user')['user'] ?? null;
+        $userId = $user->user_id ?? null;
         $keywords = isset($_GET['keywords']) ? trim($_GET['keywords']) : '';
 
         $query = "SELECT * FROM jobs WHERE 
-        role LIKE :keywords OR 
-        salary LIKE :keywords OR 
-        requirements LIKE :keywords OR 
-        description LIKE :keywords OR 
-        modality LIKE :keywords OR 
-        company_name LIKE :keywords OR
-        job_location LIKE :keywords order by updated_at desc";
+        role ILIKE :keywords OR 
+        salary::text ILIKE :keywords OR 
+        requirements ILIKE :keywords OR 
+        description ILIKE :keywords OR 
+        modality ILIKE :keywords OR 
+        company_name ILIKE :keywords OR
+        job_location ILIKE :keywords order by updated_at desc";
 
         $params = [
             'keywords' => "%{$keywords}%"
         ];
 
         $jobs = $this->db->query($query, $params)->fetchAll();
+        $saved_ids = [];
+        $applied_ids = [];
 
-        // check if user saved it
-        $exists= $this->db->query("SELECT * 
-            FROM saved_jobs 
-            WHERE user_id = :userId",[
-                'userId'=> $userId,
-            ])->fetchAll();
-        $saved_ids = array_column($exists, 'job_id');
+        if($userId){
 
-        //check if user applied it
-        $applied = $this->db->query("SELECT * 
-            FROM applied_jobs
-            WHERE user_id = :userId", [
-                 'userId'=> $userId,
-                //  'jobId' => $jobs['job_id']
-            ])->fetchAll();
-        $applied_ids = array_column($applied, 'job_id');
+            // check if user saved it
+            $exists= $this->db->query("SELECT * 
+                FROM saved_jobs 
+                WHERE user_id = :userId",[
+                    'userId'=> $userId,
+                ])->fetchAll();
+            $saved_ids = array_column($exists, 'job_id');
+    
+            //check if user applied it
+            $applied = $this->db->query("SELECT * 
+                FROM applied_jobs
+                WHERE user_id = :userId", [
+                     'userId'=> $userId,
+                    //  'jobId' => $jobs['job_id']
+                ])->fetchAll();
+            $applied_ids = array_column($applied, 'job_id');
+        }
 
 
-        loadView('jobs/index', ['jobs' => $jobs, 'saved_ids' => $saved_ids, 'applied_ids' => $applied_ids]);
+
+        loadView('jobs/index', [
+            'jobs' => $jobs, 
+            'saved_ids' => $saved_ids, 
+            'applied_ids' => $applied_ids]);
         
     }
 
@@ -523,11 +534,11 @@ class JobsController{
 
 
     public function cancelJobApplication($params){
-        $owner_id = Session::get('user')['user']->user_id;
+        $owner_id = Session::get('user')['user']->user_id ?? null;
         
         // job id from params
-        $id = $params['id'] ?? '';
-        $applicant_id = $_POST['applicant_id'];
+        $id = $params['id'] ?? null;
+        $applicant_id = $_POST['applicant_id'] ?? null;
         
         $params=[
             'id'=> $id,

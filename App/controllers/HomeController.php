@@ -15,7 +15,7 @@ class HomeController{
     }
 
     public function index(){
-        $userId = Session::get('user')['user']->user_id ?? '';
+        $userId = Session::get('user')['user']->user_id ?? null;
         $jobs = $this->db->query("SELECT * FROM jobs order by updated_at desc LIMIT 6")->fetchAll();
         // inspect($jobs);
 

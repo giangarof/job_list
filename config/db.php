@@ -2,10 +2,10 @@
 
 return [
     'host' => "localhost",
-    "port" => "3306",
+    "port" => "5432",
     "dbname" => "jobs",
     "username" => "admin",
-    "password" => "12345678"
+    "password" => "admin"
 ]
 
 ?>

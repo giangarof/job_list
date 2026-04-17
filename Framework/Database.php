@@ -8,21 +8,35 @@ use PDO;
 // A layer to connect php with the database
 class Database{
     public $conn;
+    public $adminConn;
+    private $config;
 
     // initiate the connection
     public function __construct($config){
-        $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
+        $this->config = $config;
+        $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
+        $dsn_pgs = "pgsql:host={$config['host']};port={$config['port']};dbname=postgres";
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
         ];
 
         try {
+            $this->adminConn = new PDO("pgsql:host={$config['host']};port={$config['port']};dbname=postgres", $config['username'], $config['password']);
             $this->conn = new PDO($dsn, $config['username'], $config['password'], $options);
             // echo'connected';
         } catch (PDOException $e) {
             throw new Exception("Database failed to connect: {$e->getMessage()}");
         }
+    }
+
+    private function reconnect($config){
+        $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
+
+        $this->conn = new PDO($dsn, $config['username'], $config['password'], [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+        ]);
     }
 
     // Query the DB
@@ -42,20 +56,52 @@ class Database{
     // reset the db
     public function resetDB($dbname){
 
+        $config = $this->config;
         try {
-            // Drop and create DB
-            $this->conn->exec("DROP DATABASE IF EXISTS {$dbname}");
+            // close connection
+            $this->conn = null;
+            $this->adminConn->exec("
+                SELECT pg_terminate_backend(pid)
+                FROM pg_stat_activity
+                WHERE datname = '{$dbname}'
+                AND pid <> pg_backend_pid();
+            ");
+
+            echo "Active connections terminated.<br>";
+
+
+            // POSTGREE
+            $this->adminConn->exec("DROP DATABASE IF EXISTS {$dbname}");
             echo "Database '$dbname' dropped successfully.<br>";
-            $this->conn->exec("CREATE DATABASE {$dbname}");
+            $this->adminConn->exec("CREATE DATABASE {$dbname} OWNER admin");
             echo "Database '$dbname' created successfully.<br>";
+
+            // IMPORTANT: recreate admin connection (safety)
+            // $config = $this->config;
+            $this->adminConn = new PDO(
+                "pgsql:host={$config['host']};port={$config['port']};dbname=postgres",
+                $config['username'],
+                $config['password']
+            );
+
+            $this->reconnect($this->config);
+            echo "Database reset and reconnected.<br>";
+
+
+            // MYSQL
+            // // Drop and create DB
+            // $this->conn->exec("DROP DATABASE IF EXISTS {$dbname}");
+            // echo "Database '$dbname' dropped successfully.<br>";
+            // $this->conn->exec("CREATE DATABASE {$dbname}");
+            // echo "Database '$dbname' created successfully.<br>";
 
 
             // Use DB
-            $this->conn->exec("USE `$dbname`");
+            // $this->conn->exec("USE `$dbname`");
 
             // Create User table
             $sql_users_table = "CREATE TABLE IF NOT EXISTS users (
-                user_id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 email varchar(255) unique,
                 password varchar(255) not null,
@@ -74,7 +120,7 @@ class Database{
 
             // Create jobs table
             $sql_jobs_table = "CREATE TABLE IF NOT EXISTS jobs (
-                job_id INT AUTO_INCREMENT PRIMARY KEY,
+                job_id SERIAL PRIMARY KEY,
                 role VARCHAR(255) NOT NULL,
                 salary int not null,
                 requirements varchar(255) not null,
@@ -86,7 +132,7 @@ class Database{
                 benefits varchar(255) not null,
                 user_id INT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
             )";
             $this->conn->exec($sql_jobs_table);
@@ -111,11 +157,11 @@ class Database{
 
             // create saved jobs table
             $sql_insert_savedJobs = "CREATE TABLE saved_jobs (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
                 user_id INT NOT NULL,
                 job_id INT NOT NULL,
                 saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE KEY unique_saved_job (user_id, job_id),
+                CONSTRAINT unique_saved_job UNIQUE (user_id, job_id),
 
                 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
                 FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE
@@ -125,13 +171,14 @@ class Database{
 
             // create applied jobs table
             $sql_insert_appliedJobs = "CREATE TABLE applied_jobs (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
                 user_id INT NOT NULL,
                 job_id INT NOT NULL,
-                status ENUM('Pending', 'Reviewing', 'Interviewing', 'Accepted', 'Rejected' ) DEFAULT 'Pending',
+                status VARCHAR(20) NOT NULL DEFAULT 'Pending',
+                    CHECK (status IN ('Pending', 'Reviewing', 'Interviewing', 'Accepted', 'Rejected')),
                 applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-                UNIQUE KEY unique_applied_job (user_id, job_id),
+                CONSTRAINT unique_applied_job UNIQUE (user_id, job_id),
 
                 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
                 FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE
@@ -142,7 +189,7 @@ class Database{
 
 
             $sql_create_reset_psw = "CREATE TABLE password_reset (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
                 user_id INT NOT NULL,
                 tokenHashed VARCHAR(64) NOT NULL,
                 expires_at TIMESTAMP NOT NULL,
