@@ -2,6 +2,7 @@
 
 namespace Framework;
 use PDO;
+// use PDOException;
 
 // PDO connection
 // PHP Data Objects.
@@ -14,7 +15,7 @@ class Database{
     // initiate the connection
     public function __construct($config){
         $this->config = $config;
-        $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
+        $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']};sslmode=require";
         $dsn_pgs = "pgsql:host={$config['host']};port={$config['port']};dbname=postgres";
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

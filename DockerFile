@@ -3,14 +3,19 @@ FROM php:8.2-cli
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    unzip git curl libpq-dev \
+    git curl unzip libpq-dev zip \
     && docker-php-ext-install pdo pdo_pgsql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . .
+# STEP 1: composer files first
+COPY composer.json composer.lock ./
 
-RUN composer install --no-dev --optimize-autoloader || true
+# STEP 2: install dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# STEP 3: copy app AFTER
+COPY . .
 
 EXPOSE 10000
 

@@ -1,8 +1,8 @@
 <?php
+
 namespace Framework;
 use App\Controllers\ErrorController;
 use Framework\Middleware\Authorize;
-// $routes = require getBasePath('routes.php');
 
 class Router{
     protected $routes = [];
@@ -77,11 +77,12 @@ class Router{
                     foreach($route['middleware'] as $middleware){
                         (new Authorize())->handle($middleware);
                     }
-                    $controller = 'App\\controllers\\' . $route['controller'];
+                    $controller = 'App\\Controllers\\' . $route['controller'];
                     $controllerMethod = $route['controllerMethod'];
 
                     $controllerInstance = new $controller();
                     $controllerInstance->$controllerMethod($params);
+                    // inspect_and_die($controllerInstance);
                     return;
                 }
 

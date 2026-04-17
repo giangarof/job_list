@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 use Framework\Database;
-use Framework\Validation;
+
 use Framework\Session;
 use PDO;
 

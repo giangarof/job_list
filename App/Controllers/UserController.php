@@ -215,6 +215,7 @@ class UserController{
         $baseUrl = "http://" . $_SERVER['HTTP_HOST'];
         
         $email = $_POST['email'] ?? null;
+        // inspect_and_die($email);
 
 
         // set errors
@@ -241,10 +242,12 @@ class UserController{
             'email' => $email
         ])->fetch();
 
+        // inspect_and_die($user);
+
         if(!$user){
             return forgetSuccess();
         }
-
+        
         // 2 Generate the token
         $token = bin2hex(random_bytes(32));
         $tokenHash = hash('sha256', $token);
