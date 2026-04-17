@@ -28,6 +28,9 @@ $router->route($uri);
 // seed render
 // psql postgresql://admin:knFomvNwXBlH2atY5dreUeYv0V7v5j8n@dpg-d7gpppj7uimc73cu5ikg-a.oregon-postgres.render.com/jobs_32p6 -f script.sql
 
+// connect
+// psql postgresql://admin:knFomvNwXBlH2atY5dreUeYv0V7v5j8n@dpg-d7gpppj7uimc73cu5ikg-a.oregon-postgres.render.com/jobs_32p6
+
 
 // Locally restar db
 // $config= require getBasePath('config/db.php');
