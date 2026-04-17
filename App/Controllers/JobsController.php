@@ -587,11 +587,5 @@ class JobsController{
         redirect($_SERVER['HTTP_REFERER']);
 
     }
-
-    
-
-
 }
-
 ?>
-                             
